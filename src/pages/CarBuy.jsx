@@ -222,7 +222,7 @@ export default function CarBuy() {
             renderItem={(car) => (
               <OfferCard
                 key={car._id}
-                imageSrc={`http://localhost:8080/${car.images[0]}`}
+                imageSrc={car.images[0].url}
                 imageAlt={car.make}
                 title={`${car.make} ${car.model}`}
                 description={car.description}
@@ -258,7 +258,7 @@ export default function CarBuy() {
             renderItem={(car) => (
               <OfferCard
                 key={car._id}
-                imageSrc={`http://localhost:8080/${car.images[0]}`}
+                imageSrc={car.images[0].url}
                 imageAlt={car.make}
                 title={`${car.make} ${car.model}`}
                 description={car.description}

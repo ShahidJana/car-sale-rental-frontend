@@ -173,7 +173,7 @@ const CarDetailPage = () => {
             <ImageSlider
               images={
                 car?.images?.length > 0
-                  ? car.images.map((img) => `http://localhost:8080/${img}`)
+                  ? car.images.map((img) => `${img.url}`)
                   : []
               }
               altText={`${car.make} ${car.model}`}
