@@ -93,10 +93,10 @@ export default function SoldCarDetails() {
         return matchingCar ? (
           <div className="flex items-center gap-2">
             <img
-              src={`http://localhost:8080/${
+              src={`${
                 Array.isArray(matchingCar.images)
-                  ? matchingCar.images[0]
-                  : matchingCar.images
+                  ? matchingCar.images[0].url
+                  : matchingCar.images.url
               }`}
               alt={matchingCar.make}
               className="w-12 h-12 rounded"

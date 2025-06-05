@@ -66,10 +66,10 @@ export default function RentCarDetails() {
         return item.carId ? (
           <div className="flex items-center gap-2">
             <img
-              src={`http://localhost:8080/${
+              src={`${
                 Array.isArray(item.carId.images)
-                  ? item.carId.images[0]
-                  : item.carId.images
+                  ? item.carId.images[0].url
+                  : item.carId.images.url
               }`}
               alt={item.carId.make}
               className="w-12 h-12 rounded"
