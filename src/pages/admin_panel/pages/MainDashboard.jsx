@@ -17,7 +17,10 @@ const DashboardCard = ({ title, value, bgColor, to, Icon }) => (
           <h2 className="text-xl md:text-2xl font-semibold">{title}</h2>
           <p className="text-3xl md:text-4xl font-extrabold mt-2">{value}</p>
         </div>
-        <Icon className="text-5xl md:text-6xl opacity-60 self-end" aria-label={title} />
+        <Icon
+          className="text-5xl md:text-6xl opacity-60 self-end"
+          aria-label={title}
+        />
       </div>
     </div>
   </Link>
@@ -54,45 +57,48 @@ export const Dashboard = () => {
     fetchDashboardData();
   }, []);
 
-  const adminUser = activeUsers.find((user) => user.role === "admin");
+  const adminName = localStorage.getItem("loggedInUser");
 
-  const stats = useMemo(() => [
-    {
-      title: "Listed Cars",
-      value: listedCars.length,
-      bgColor: "bg-blue-500",
-      to: "/admin-dashboard/listed-cars",
-      Icon: FaCar,
-    },
-    {
-      title: "Sold Cars",
-      value: soldCars.length,
-      bgColor: "bg-green-500",
-      to: "/admin-dashboard/sold-cars",
-      Icon: FaMoneyCheck,
-    },
-    {
-      title: "Rented Cars",
-      value: rentedCars.length,
-      bgColor: "bg-yellow-500",
-      to: "/admin-dashboard/rented-cars",
-      Icon: FaKey,
-    },
-    {
-      title: "Active Users",
-      value: activeUsers.length,
-      bgColor: "bg-purple-500",
-      to: "/admin-dashboard/active-users",
-      Icon: FaUserCheck,
-    },
-  ], [listedCars, soldCars, rentedCars, activeUsers]);
+  const stats = useMemo(
+    () => [
+      {
+        title: "Listed Cars",
+        value: listedCars.length,
+        bgColor: "bg-blue-500",
+        to: "/admin-dashboard/listed-cars",
+        Icon: FaCar,
+      },
+      {
+        title: "Sold Cars",
+        value: soldCars.length,
+        bgColor: "bg-green-500",
+        to: "/admin-dashboard/sold-cars",
+        Icon: FaMoneyCheck,
+      },
+      {
+        title: "Rented Cars",
+        value: rentedCars.length,
+        bgColor: "bg-yellow-500",
+        to: "/admin-dashboard/rented-cars",
+        Icon: FaKey,
+      },
+      {
+        title: "Active Users",
+        value: activeUsers.length,
+        bgColor: "bg-purple-500",
+        to: "/admin-dashboard/active-users",
+        Icon: FaUserCheck,
+      },
+    ],
+    [listedCars, soldCars, rentedCars, activeUsers]
+  );
 
   return (
     <div className="p-6 space-y-6">
       <div className="flex justify-between items-center mt-6 mb-4">
         <div>
           <h1 className="text-2xl font-semibold mb-1">
-            {adminUser?.name || "Dashboard"}
+          {  adminName || "Dashboard"}
           </h1>
           <p className="text-gray-600">Welcome to the Admin Dashboard!</p>
         </div>
