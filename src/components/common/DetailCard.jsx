@@ -22,80 +22,83 @@ const DetailCard = ({
   searchComponent = null,
   customRender = null,
 }) => {
- const defaultRender = (item, key) => {
-  if (!item) return "-";
+  const defaultRender = (item, key) => {
+    if (!item) return "-";
 
-  // Render image if key matches imageKey and item has that property
-  if (key === imageKey && item[key]) {
-    const imageSrc = Array.isArray(item[key]) ? item[key][0] : item[key];
-    return (
-      <img
-        src={`http://localhost:8080/${imageSrc}`}
-        alt={item[imageAltKey] || "Image"}
-        className="w-12 h-12 object-cover rounded"
-      />
-    );
-  }
+    // Render image if key matches imageKey and item has that property
+    if (key === imageKey && item[key]) {
+      const imageSrc = Array.isArray(item[key])
+        ? item[key][0].url
+        : item[key].url || item[key];
+      return (
+        <img
+          src={`${imageSrc}`}
+          alt={item[imageAltKey] || "Image"}
+          className="w-12 h-12 object-cover rounded"
+        />
+      );
+    }
 
-  // Handle array keys: render all existing values or "-"
-  if (Array.isArray(key)) {
-    const hasValue = key.some(k => !!item[k]);
-    return hasValue ? (
-      <>
-        {key.map((k, i) => item[k] && <div key={i}>{item[k]}</div>)}
-      </>
-    ) : (
-      "-"
-    );
-  }
+    // Handle array keys: render all existing values or "-"
+    if (Array.isArray(key)) {
+      const hasValue = key.some((k) => !!item[k]);
+      return hasValue ? (
+        <>{key.map((k, i) => item[k] && <div key={i}>{item[k]}</div>)}</>
+      ) : (
+        "-"
+      );
+    }
 
-  if (key === "price" && typeof item[key] === "number") {
-    return `Rs. ${item[key].toLocaleString()}/-`;
-  }
+    if (key === "price" && typeof item[key] === "number") {
+      return `Rs. ${item[key].toLocaleString()}/-`;
+    }
 
-  if (key === "listingType") {
-    const type = item[key];
-    if (!type) return "-";
+    if (key === "listingType") {
+      const type = item[key];
+      if (!type) return "-";
 
-    const labelMap = {
-      sale: { text: "Sale", color: "bg-green-100 text-green-700" },
-      rent: { text: "Rent", color: "bg-blue-100 text-blue-700" },
-      offer: { text: "Offer", color: "bg-yellow-100 text-yellow-700" },
-      ads: { text: "Ad", color: "bg-red-100 text-red-700" },
-    };
+      const labelMap = {
+        sale: { text: "Sale", color: "bg-green-100 text-green-700" },
+        rent: { text: "Rent", color: "bg-blue-100 text-blue-700" },
+        offer: { text: "Offer", color: "bg-yellow-100 text-yellow-700" },
+        ads: { text: "Ad", color: "bg-red-100 text-red-700" },
+      };
 
-    const label = labelMap[type];
+      const label = labelMap[type];
 
-    return label ? (
-      <span className={`px-2 py-1 text-sm font-medium rounded ${label.color}`}>
-        {label.text}
-      </span>
-    ) : (
-      <span className="px-2 py-1 text-sm font-medium rounded bg-gray-100 text-gray-700">
-        {type}
-      </span>
-    );
-  }
+      return label ? (
+        <span
+          className={`px-2 py-1 text-sm font-medium rounded ${label.color}`}
+        >
+          {label.text}
+        </span>
+      ) : (
+        <span className="px-2 py-1 text-sm font-medium rounded bg-gray-100 text-gray-700">
+          {type}
+        </span>
+      );
+    }
 
- if (Array.isArray(key)) {
-  return key
-    .map(k => {
-      if (k === "mileage" && typeof item[k] === "number") {
-        return `${item[k].toLocaleString()} MPG`;
-      }
-      if ((k === "seats" || k === "seatingCapacity") && typeof item[k] === "number") {
-        return `${item[k].toLocaleString()} Seats`;
-      }
-      return item[k] ?? "-";
-    })
-    .filter(Boolean)
-    .join(", "); // Or wrap in React fragments if JSX
-}
+    if (Array.isArray(key)) {
+      return key
+        .map((k) => {
+          if (k === "mileage" && typeof item[k] === "number") {
+            return `${item[k].toLocaleString()} MPG`;
+          }
+          if (
+            (k === "seats" || k === "seatingCapacity") &&
+            typeof item[k] === "number"
+          ) {
+            return `${item[k].toLocaleString()} Seats`;
+          }
+          return item[k] ?? "-";
+        })
+        .filter(Boolean)
+        .join(", "); // Or wrap in React fragments if JSX
+    }
 
-
-  return item[key] ?? "-";
-};
-
+    return item[key] ?? "-";
+  };
 
   return (
     <div className="p-6 space-y-8">

@@ -21,7 +21,7 @@ const CarCard = ({ car }) => {
           className="w-full h-full bg-gray-200 object-cover transition-transform duration-500 group-hover:scale-110"
           src={
             car?.images?.length > 0
-              ? `http://localhost:8080/${car.images[0]}`
+              ? `${car.images[0].url}`
               : "https://via.placeholder.com/400x300?text=No+Image"
           }
           alt={`${car.make} ${car.model}`}

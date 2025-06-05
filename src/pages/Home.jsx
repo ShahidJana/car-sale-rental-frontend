@@ -18,55 +18,6 @@ import axios from "axios";
 import { ToastContainer } from "react-toastify";
 import { handleError } from "../utils";
 
-const testimonials = [
-  {
-    name: "John Doe",
-    quote:
-      "Amazing service! Found my dream car at a great price.The rental process was so smooth and easy. Highly recommend",
-    author: "John D., New York",
-    rating: 3,
-    image: "https://randomuser.me/api/portraits/men/32.jpg",
-  },
-  {
-    name: "Sarah Smith",
-    quote: "The rental process was so smooth and easy. Highly recommend!",
-    author: "Sarah S., Chicago",
-    rating: 4,
-    image: "https://randomuser.me/api/portraits/women/44.jpg",
-  },
-  {
-    name: "Michael Johnson",
-    quote:
-      "Amazing service! Found my dream car at a great price.Best car buying experience I've ever had. Will come back!",
-    author: "Michael J., Los Angeles",
-    rating: 5,
-    image: "https://randomuser.me/api/portraits/men/75.jpg",
-  },
-  {
-    name: "Sarah Smith",
-    quote: "The rental process was so smooth and easy. Highly recommend!",
-    author: "Sarah S., Chicago",
-    rating: 4,
-    image: "https://randomuser.me/api/portraits/women/44.jpg",
-  },
-  {
-    name: "Michael Johnson",
-    quote:
-      "Amazing service! Found my dream car at a great price.Best car buying experience I've ever had. Will come back!",
-    author: "Michael J., Los Angeles",
-    rating: 5,
-    image: "https://randomuser.me/api/portraits/men/75.jpg",
-  },
-  {
-    name: "John Doe",
-    quote:
-      "Amazing service! Found my dream car at a great price.The rental process was so smooth and easy. Highly recommend",
-    author: "John D., New York",
-    rating: 3,
-    image: "https://randomuser.me/api/portraits/men/32.jpg",
-  },
-];
-
 const faqs = [
   {
     question: "How do I buy a car from your website?",
@@ -155,7 +106,7 @@ const CarCard = ({ car }) => {
         {/* <p className="mt-2 text-sm">{car.description}</p> */}
       </div>
       <img
-        src={`http://localhost:8080/` + car.images[0]}
+        src={car.images[0].url}
         alt={car.title}
         className="w-full h-40 object-contain mt-4"
       />
@@ -374,7 +325,7 @@ const LandingPage = () => {
                 className="bg-white text-black rounded-2xl overflow-hidden shadow-lg flex flex-col"
               >
                 <img
-                  src={`http://localhost:8080/` + car.images[0]}
+                  src={car.images[0].url}
                   alt={car.make}
                   className="h-52 object-contain w-full"
                 />

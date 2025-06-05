@@ -502,7 +502,7 @@ export default function CarSaleForm() {
         <div className="flex flex-col sm:flex-row items-center gap-6 bg-gray-100 p-6 rounded-xl mb-10 shadow-inner">
           <img
             className="w-44 h-36 object-cover rounded-xl border border-gray-300 shadow"
-            src={`http://localhost:8080/${car.images[0]}`}
+            src={`${car.images[0].url}`}
             alt={car.make}
           />
           <div className="text-base text-gray-700 space-y-1 w-full sm:w-auto">
