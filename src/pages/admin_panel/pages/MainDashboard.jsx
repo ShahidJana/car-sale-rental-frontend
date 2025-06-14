@@ -95,9 +95,9 @@ export const Dashboard = () => {
 
   return (
     <div className="p-6 space-y-6">
-      <div className="flex justify-between items-center mt-6 mb-4">
+      <div className="flex justify-between items-center mt-2 mb-4">
         <div>
-          <h1 className="text-2xl font-semibold mb-1">
+          <h1 className="text-3xl font-bold mb-1">
           {  adminName || "Dashboard"}
           </h1>
           <p className="text-gray-600">Welcome to the Admin Dashboard!</p>

@@ -38,7 +38,6 @@ const CarForm = ({ isEdit = false }) => {
   const [imagePreviews, setImagePreviews] = useState([]);
   const [existingImages, setExistingImages] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState({ text: "", type: "" });
   const match = useMatch("/sell-a-car");
   //Input Fields
   const inputFields = [
@@ -177,7 +176,7 @@ const CarForm = ({ isEdit = false }) => {
 
         setExistingImages(images);
       } catch (err) {
-        handleError(err.message || "Failed to fetch car data.")
+        handleError(err.message || "Failed to fetch car data.");
       } finally {
         setLoading(false);
       }
@@ -208,7 +207,7 @@ const CarForm = ({ isEdit = false }) => {
     e.target.value = null;
 
     if (files.length + imagePreviews.length + existingImages.length > 5) {
-      return handleError("Maximum 5 images allowed")
+      return handleError("Maximum 5 images allowed");
     }
 
     const validFiles = files.filter((file) => {
@@ -217,7 +216,7 @@ const CarForm = ({ isEdit = false }) => {
           file.type
         ) && file.size <= 5 * 1024 * 1024;
       if (!isValid) {
-        handleError(`Invalid or too large: ${file.name}`)
+        handleError(`Invalid or too large: ${file.name}`);
       }
       return isValid;
     });
@@ -242,7 +241,6 @@ const CarForm = ({ isEdit = false }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setMessage({ text: "", type: "" });
 
     try {
       const form = new FormData();
@@ -253,9 +251,13 @@ const CarForm = ({ isEdit = false }) => {
 
       images.forEach((image) => form.append("images", image));
       if (isEdit) {
-        for (let i = 0; i < existingImages.length; i++) {
-          form.append("images", existingImages[i]);
-        }
+        // for (let i = 0; i < existingImages.length; i++) {
+        //   form.append("images", existingImages[i]);
+
+        // }
+        existingImages.forEach((img) => {
+          form.append("images", JSON.stringify(img)); 
+        });
       }
 
       const method = isEdit ? "put" : "post";
@@ -268,13 +270,12 @@ const CarForm = ({ isEdit = false }) => {
           "Content-Type": "multipart/form-data",
         },
       });
-      handleSuccess(`Car ${isEdit ? "updated" : "created"} successfully!`);
+      handleSuccess(`Car Record ${isEdit ? "updated" : "created"} !`);
       setTimeout(() => navigate(-1), 1500);
     } catch (err) {
       const msg =
         err.response?.data?.error || err.message || "Unexpected error";
       handleError(msg);
-      setMessage();
     } finally {
       setLoading(false);
     }
@@ -299,11 +300,15 @@ const CarForm = ({ isEdit = false }) => {
 
       {loading && !formData.make ? (
         <div className="flex justify-center items-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-green-600"></div>
         </div>
       ) : (
-        <form onSubmit={handleSubmit} className="space-y-8 sm:space-y-12">
-          {/*Section 0: For Sale, Rent or Sale Ads */}
+        <form
+          autoComplete="off"
+          onSubmit={handleSubmit}
+          className="space-y-8 sm:space-y-12"
+        >
+          {/*Section 1: For Sale, Rent or Sale Ads */}
           <div className="bg-gray-50 p-4 sm:p-6 rounded-xl border border-gray-200">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               {Object.entries(selectOptions).map(([name, options]) => {
@@ -315,6 +320,7 @@ const CarForm = ({ isEdit = false }) => {
                   name === "fuelType"
                 )
                   return null;
+
                 return (
                   <div key={name} className="space-y-2">
                     <label
@@ -331,7 +337,7 @@ const CarForm = ({ isEdit = false }) => {
                       name={name}
                       value={formData[name]}
                       onChange={handleChange}
-                      className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none bg-white bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWNoZXZyb24tZG93biI+PHBhdGggZD0ibTYgOSA2IDYgNi02Ii8+PC9zdmc+')] bg-no-repeat bg-[right_0.75rem_center] bg-[length:1.25rem]"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-green-600 transition-all bg-white appearance-none bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWNoZXZyb24tZG93biI+PHBhdGggZD0ibTYgOSA2IDYgNi02Ii8+PC9zdmc+')] bg-no-repeat bg-[right_0.75rem_center] bg-[length:1.25rem]"
                     >
                       <option value="">Select {name}</option>
                       {options.map((option) => (
@@ -345,7 +351,8 @@ const CarForm = ({ isEdit = false }) => {
               })}
             </div>
           </div>
-          {/* Section 1: Basic Information */}
+
+          {/* Section 2: Basic Information */}
           <div className="bg-gray-50 p-4 sm:p-6 rounded-xl border border-gray-200">
             <div className="flex items-center mb-4 sm:mb-5">
               <div className="bg-blue-100 p-2 rounded-lg mr-3 sm:mr-4">
@@ -367,17 +374,15 @@ const CarForm = ({ isEdit = false }) => {
                     {required && <span className="text-red-500 ml-1">*</span>}
                   </label>
                   <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
-                      {/* {getIcon(icon)} */}
-                    </div>
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400"></div>
                     <input
                       type={type}
                       name={name}
                       value={formData[name]}
                       onChange={handleChange}
-                      className="w-full pl-10 pr-3 sm:pr-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
                       required={required}
                       min={type === "number" ? "0" : undefined}
+                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-green-600 transition-all"
                     />
                   </div>
                 </div>
@@ -385,30 +390,10 @@ const CarForm = ({ isEdit = false }) => {
             </div>
           </div>
 
-          {/* Section 2: Specifications */}
+          {/* Section 3: Specifications */}
           <div className="bg-gray-50 p-4 sm:p-6 rounded-xl border border-gray-200">
             <div className="flex items-center mb-4 sm:mb-5">
               <div className="bg-blue-100 p-2 rounded-lg mr-3 sm:mr-4">
-                {/* <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 sm:h-6 w-5 sm:w-6 text-green-600"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-                  />
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                  />
-                </svg> */}
                 <FaListAlt size={20} className="text-green-600" />
               </div>
               <h3 className="text-lg sm:text-xl font-bold text-gray-800">
@@ -429,10 +414,11 @@ const CarForm = ({ isEdit = false }) => {
                         name.slice(1).replace(/([A-Z])/g, " $1")}
                     </label>
                     <select
+                      id={name}
                       name={name}
                       value={formData[name]}
                       onChange={handleChange}
-                      className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none bg-white bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWNoZXZyb24tZG93biI+PHBhdGggZD0ibTYgOSA2IDYgNi02Ii8+PC9zdmc+')] bg-no-repeat bg-[right_0.75rem_center] bg-[length:1.25rem]"
+                      className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-green-600 transition-all appearance-none bg-white bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWNoZXZyb24tZG93biI+PHBhdGggZD0ibTYgOSA2IDYgNi02Ii8+PC9zdmc+')] bg-no-repeat bg-[right_0.75rem_center] bg-[length:1.25rem]"
                     >
                       <option value="">Select {name}</option>
                       {options.map((option) => (
@@ -447,7 +433,8 @@ const CarForm = ({ isEdit = false }) => {
             </div>
           </div>
 
-          {/* Section 3: Features & Description */}
+          {/* Section 4: Features & Description */}
+
           <div className="bg-gray-50 p-4 sm:p-6 rounded-xl border border-gray-200">
             <div className="flex items-center mb-4 sm:mb-5">
               <div className="bg-blue-100 p-2 rounded-lg mr-3 sm:mr-4">
@@ -461,18 +448,19 @@ const CarForm = ({ isEdit = false }) => {
             <div className="space-y-4 sm:space-y-6">
               <div>
                 <label
-                  htmlFor={name}
+                  htmlFor="features"
                   className="block text-sm font-medium text-gray-700 mb-2"
                 >
                   Features (comma separated)
                 </label>
                 <input
+                  id="features"
                   type="text"
                   name="features"
                   value={formData.features}
                   onChange={handleChange}
                   placeholder="e.g., Sunroof, Leather Seats, Navigation, Heated Seats"
-                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-green-600 transition"
                 />
                 <p className="mt-1 text-sm text-gray-500">
                   List the key features of your vehicle
@@ -481,18 +469,25 @@ const CarForm = ({ isEdit = false }) => {
 
               <div>
                 <label
-                  htmlFor={name}
+                  htmlFor="description"
                   className="block text-sm font-medium text-gray-700 mb-2"
                 >
-                  {match ? <div className="text-red-600">Enter your Name, Contact Details, Location with </div> : ""} 
-                  Detailed Description 
+                  {match ? (
+                    <div className="text-red-600">
+                      Enter your Name, Contact Details, Location with{" "}
+                    </div>
+                  ) : (
+                    ""
+                  )}
+                  Detailed Description
                 </label>
                 <textarea
+                  id="description"
                   name="description"
                   value={formData.description}
                   onChange={handleChange}
                   rows={5}
-                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-green-600 transition"
                   placeholder="Provide detailed information about the car's condition, history, maintenance records, modifications, and any special features..."
                 />
                 <p className="mt-1 text-sm text-gray-500">
@@ -503,24 +498,10 @@ const CarForm = ({ isEdit = false }) => {
             </div>
           </div>
 
-          {/* Section 4: Images */}
+          {/* Section 5: Images */}
           <div className="bg-gray-50 p-4 sm:p-6 rounded-xl border border-gray-200">
             <div className="flex items-center mb-4 sm:mb-5">
               <div className="bg-blue-100 p-2 rounded-lg mr-3 sm:mr-4">
-                {/* <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 sm:h-6 w-5 sm:w-6 text-green-600"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                  />
-                </svg> */}
                 <FaImage size={20} className="text-green-600" />
               </div>
               <h3 className="text-lg sm:text-xl font-bold text-gray-800">
@@ -538,7 +519,7 @@ const CarForm = ({ isEdit = false }) => {
                   <div key={`existing-${index}`} className="relative group">
                     <div className="aspect-square bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
                       <img
-                        src={`http://localhost:8080/` + src}
+                        src={typeof src === "string" ? src : src.url}
                         alt={`existing-${index}`}
                         className="object-cover w-full h-full group-hover:opacity-75 transition-opacity"
                       />
@@ -577,20 +558,6 @@ const CarForm = ({ isEdit = false }) => {
 
                 {existingImages.length + imagePreviews.length < 5 && (
                   <label className="aspect-square flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-lg hover:border-green-600 transition-colors cursor-pointer bg-gray-50/50">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="w-6 sm:w-8 h-6 sm:h-8 text-gray-400 mb-1 sm:mb-2"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={1.5}
-                        d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-                      />
-                    </svg>
                     <span className="text-xs sm:text-sm text-gray-600 font-medium">
                       Add Images
                     </span>
@@ -611,18 +578,6 @@ const CarForm = ({ isEdit = false }) => {
             </div>
           </div>
 
-          {/* {handleSuccess && (
-            <div
-              className={`mb-6 p-3 sm:p-4 rounded-lg text-center transition-all duration-300 ${
-                message.type === "error"
-                  ? "bg-red-100 text-red-800 border border-red-200"
-                  : "bg-emerald-100 text-emerald-800 border border-emerald-200"
-              }`}
-            >
-              {message.text}
-            </div>
-          )} */}
-
           {/* Submit Section */}
           <div className="pt-3 sm:pt-4 border-t border-gray-200">
             <div className="flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-4">
@@ -636,7 +591,7 @@ const CarForm = ({ isEdit = false }) => {
                 <button
                   type="button"
                   onClick={() => navigate(-1)}
-                  className="w-full sm:w-auto px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-medium transition-all bg-yellow-400 hover:bg-yellow-600 text-white shadow hover:shadow-md active:scale-[0.98]"
+                  className="w-full sm:w-auto px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-medium transition-all bg-red-600 hover:bg-red-700 text-white shadow hover:shadow-md active:scale-[0.98]"
                 >
                   Cancel
                 </button>
@@ -644,9 +599,7 @@ const CarForm = ({ isEdit = false }) => {
                   type="submit"
                   disabled={loading}
                   className={`w-full sm:w-auto px-4 sm:px-8 py-2 sm:py-3 rounded-lg font-bold transition-all ${
-                    loading
-                      ? "bg-green-600"
-                      : "bg-yellow-400 hover:bg-yellow-600"
+                    loading ? "bg-green-600" : "bg-green-600 hover:bg-green-700"
                   } text-white shadow hover:shadow-md active:scale-[0.98] min-w-[120px] sm:min-w-[200px]`}
                 >
                   {loading ? (

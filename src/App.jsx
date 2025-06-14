@@ -11,7 +11,7 @@ import Contact from "./pages/Contact";
 import About from "./pages/About";
 import TermsOfService from "./pages/TermsOfService";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
-import BuyandRentForm from "./components/common/BuyandRentForm";
+import CheckOutForm from "./components/common/CheckOutForm";
 import AdminRoutes from "./pages/admin_panel/admin_routes/AdminRoutes";
 import ResetPassword from "./pages/ResetPassword";
 import ForgotPassword from "./pages/ForgotPassword";
@@ -104,7 +104,7 @@ function App() {
           path="/detailcarform"
           element={
             <RequireAuth roles={["user", "admin"]}>
-              <BuyandRentForm />
+              <CheckOutForm />
             </RequireAuth>
           }
         />

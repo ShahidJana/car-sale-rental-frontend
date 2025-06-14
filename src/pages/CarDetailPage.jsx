@@ -295,7 +295,7 @@ const CarDetailPage = () => {
                   }
                 >
                   <img
-                    src={`http://localhost:8080/${relatedCar.images[0]}`}
+                    src={`${relatedCar.images[0].url}`}
                     alt={`${relatedCar.make} ${relatedCar.model}`}
                     className="w-full h-40 object-cover"
                   />

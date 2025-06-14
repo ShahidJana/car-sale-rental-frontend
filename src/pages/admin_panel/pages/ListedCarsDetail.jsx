@@ -61,7 +61,7 @@ export default function CarDetails() {
         addButtonLink="new"
         headers={[
           "Image",
-          "Make & Model",
+          "Make Model",
           "Listing Type",
           "Price",
           "Year & Color",

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { ToastContainer } from "react-toastify";
 import { handleError, handleSuccess } from "../../../utils";
@@ -80,7 +80,6 @@ export default function UsersDetail() {
   };
 
   const handleChange = (e) => {
-    // setFormData({ ...formData, [e.target.name]: e.target.value });
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
@@ -90,7 +89,7 @@ export default function UsersDetail() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { name, email, password } = formData;
+    const { name, email, password, role } = formData;
 
     if (!name || !email || !password) {
       return handleError("Name, Email & Password are required");
@@ -104,6 +103,9 @@ export default function UsersDetail() {
     if (password.length < 6) {
       return handleError("Password must be at least 6 digits long");
     }
+    if (!role) {
+      return handleError("Select the role");
+    }
     try {
       if (formData._id) {
         const { _id, password, ...updateData } = formData;
@@ -111,13 +113,20 @@ export default function UsersDetail() {
         handleSuccess(res.data.message);
       } else {
         const res = await axios.post(`${API_URL}/user_auth/signup`, formData);
-        handleSuccess(res.data.message);
+        handleSuccess("User Registered Successfully ");
       }
 
       await fetchUsers();
       setMode("list");
     } catch (err) {
-      handleError(err.message);
+      // if (err.response && err.response.status === 409) {
+      handleError(
+        "This email already exists. Please try again with a different one." ||
+          err.response.data.message
+      );
+      // } else {
+      //   handleError(err.message || "Something went wrong");
+      // }
     }
   };
 
@@ -162,7 +171,7 @@ export default function UsersDetail() {
         iconStyle2={iconStyle2}
         handleDelete={handleDelete}
         handleEdit={handleEdit}
-        editLinkBase="/add"
+        // editLinkBase="/add"
         searchComponent={
           <SearchBar
             searchTerm={searchTerm}
@@ -205,13 +214,12 @@ export default function UsersDetail() {
                       name={field}
                       value={formData[field]}
                       onChange={handleChange}
-                      required={field !== "password"}
                       placeholder={`${
                         field === "password"
                           ? "Password must be at least 6 digits long"
                           : `${"Enter your " + field}`
-                      }`} // 👈 placeholder here
-                      className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+                      }`}
+                      className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-600"
                     />
                   </div>
                 ))}
@@ -228,8 +236,7 @@ export default function UsersDetail() {
                     name="role"
                     value={formData.role}
                     onChange={handleChange}
-                    required
-                    className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+                    className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-600"
                   >
                     <option value="" disabled>
                       Select a role
@@ -243,7 +250,7 @@ export default function UsersDetail() {
                   <button
                     type="button"
                     onClick={closeModal}
-                    className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500"
+                    className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
                   >
                     Cancel
                   </button>

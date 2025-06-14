@@ -105,11 +105,13 @@ const CarCard = ({ car }) => {
         </p>
         {/* <p className="mt-2 text-sm">{car.description}</p> */}
       </div>
-      <img
-        src={car.images[0].url}
-        alt={car.title}
-        className="w-full h-40 object-contain mt-4"
-      />
+      {car.images?.length > 0 && car.images[0]?.url && (
+        <img
+          src={car.images[0].url}
+          alt={car.title || "Car image"}
+          className="w-full h-40 object-contain mt-4"
+        />
+      )}
     </div>
   );
 };

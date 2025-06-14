@@ -11,7 +11,7 @@ const AdminDashboard = () => {
       <div className="flex h-full relative bg-gray-50">
         {/* Hamburger Button (visible only below lg) */}
         <button
-          className="fixed top-6 left-6 z-50 bg-green-600 text-white px-2 p-1 rounded-md shadow-md hover:bg-green-700 transition lg:hidden"
+          className="fixed top-6 right-6 z-50 bg-green-600 text-white px-2 p-1 rounded-md shadow-md hover:bg-green-700 transition lg:hidden"
           onClick={() => setShowSidebar(!showSidebar)}
           aria-label="Toggle Sidebar"
         >
@@ -33,7 +33,7 @@ const AdminDashboard = () => {
             lg:translate-x-0 lg:relative lg:block
           `}
         >
-          <h2 className="text-3xl font-bold text-green-600 mb-8 ">
+          <h2 className="text-3xl font-bold text-yellow-500 mb-8 ">
             Admin Panel <br />
           </h2>
 
@@ -48,8 +48,8 @@ const AdminDashboard = () => {
               {
                 to: "/admin-dashboard/listed-cars",
                 label: "Listed Cars",
-                bg: "bg-yellow-500",
-                hover: "hover:bg-yellow-600",
+                bg: "bg-green-600",
+                hover: "hover:hover:bg-green-700",
               },
               {
                 to: "/admin-dashboard/sold-cars",
@@ -60,8 +60,8 @@ const AdminDashboard = () => {
               {
                 to: "/admin-dashboard/rented-cars",
                 label: "Rented Cars",
-                bg: "bg-yellow-500",
-                hover: "hover:bg-yellow-600",
+                bg: "bg-green-600",
+                hover: "hover:hover:bg-green-700",
               },
               {
                 to: "/admin-dashboard/active-users",
