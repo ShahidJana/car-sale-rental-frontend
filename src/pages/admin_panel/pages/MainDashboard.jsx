@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useMemo } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { FaCar, FaMoneyCheck, FaKey, FaUserCheck } from "react-icons/fa";
+import { FaCar, FaMoneyCheck, FaKey, FaUserCheck, FaRegComment, FaComments	 } from "react-icons/fa";
 import { ToastContainer } from "react-toastify";
 import { handleError } from "../../../utils";
 
@@ -31,6 +31,7 @@ export const Dashboard = () => {
   const [soldCars, setSoldCars] = useState([]);
   const [rentedCars, setRentedCars] = useState([]);
   const [activeUsers, setActiveUsers] = useState([]);
+  const [reviewRating,setReviewRating] = useState([])
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -84,10 +85,17 @@ export const Dashboard = () => {
       },
       {
         title: "Active Users",
-        value: activeUsers.length,
+        value: activeUsers.length ,
         bgColor: "bg-purple-500",
         to: "/admin-dashboard/active-users",
         Icon: FaUserCheck,
+      },
+      {
+        title: "Reviews",
+        value: reviewRating.length ,
+        bgColor: "bg-gray-400",
+        to: "/admin-dashboard/active-users",
+        Icon: FaComments,
       },
     ],
     [listedCars, soldCars, rentedCars, activeUsers]

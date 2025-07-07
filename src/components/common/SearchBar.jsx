@@ -5,7 +5,7 @@ export const SearchBar = ({ searchTerm, setSearchTerm, placeholder }) => {
   return (
     <div className="w-full bg-white rounded shadow p-4">
       <div className="flex items-center gap-3 w-full">
-        <FiSearch className="text-gray-500" />
+        {/* <FiSearch className="text-gray-500" /> */}
         <input
           type="text"
           placeholder={placeholder || "Search..."}

@@ -11,7 +11,7 @@ import Contact from "./pages/Contact";
 import About from "./pages/About";
 import TermsOfService from "./pages/TermsOfService";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
-import CheckOutForm from "./components/common/CheckOutForm";
+import RequestForm from "./components/common/RequestForm";
 import AdminRoutes from "./pages/admin_panel/admin_routes/AdminRoutes";
 import ResetPassword from "./pages/ResetPassword";
 import ForgotPassword from "./pages/ForgotPassword";
@@ -55,17 +55,17 @@ function App() {
         <Route
           path="/home"
           element={
-            <RequireAuth roles={["user", "admin"]}>
-              <Home />
-            </RequireAuth>
+            // <RequireAuth roles={["user", "admin"]}>
+            <Home />
+            // </RequireAuth>
           }
         />
         <Route
           path="/car-sale"
           element={
-            <RequireAuth roles={["user", "admin"]}>
-              <CarBuy />
-            </RequireAuth>
+            // <RequireAuth roles={["user", "admin"]}>
+            <CarBuy />
+            // </RequireAuth>
           }
         />
         <Route
@@ -79,65 +79,65 @@ function App() {
         <Route
           path="/car-rent"
           element={
-            <RequireAuth roles={["user", "admin"]}>
-              <CarRental />
-            </RequireAuth>
+            // <RequireAuth roles={["user", "admin"]}>
+            <CarRental />
+            // </RequireAuth>
           }
         />
         <Route
           path="/car-sale/:id/detailed"
           element={
-            <RequireAuth roles={["user", "admin"]}>
-              <CarDetailPage />
-            </RequireAuth>
+            // <RequireAuth roles={["user", "admin"]}>
+            <CarDetailPage />
+            // </RequireAuth>
           }
         />
         <Route
           path="/car-rent/:id/detailed"
           element={
-            <RequireAuth roles={["user", "admin"]}>
-              <CarDetailPage />
-            </RequireAuth>
+            // <RequireAuth roles={["user", "admin"]}>
+            <CarDetailPage />
+            // </RequireAuth>
           }
         />
         <Route
           path="/detailcarform"
           element={
             <RequireAuth roles={["user", "admin"]}>
-              <CheckOutForm />
-            </RequireAuth>
+              <RequestForm />
+             </RequireAuth>
           }
         />
         <Route
           path="/contact-us"
           element={
-            <RequireAuth roles={["user", "admin"]}>
+            // <RequireAuth roles={["user", "admin"]}>
               <Contact />
-            </RequireAuth>
+            // </RequireAuth>
           }
         />
         <Route
           path="/about-us"
           element={
-            <RequireAuth roles={["user", "admin"]}>
+            // <RequireAuth roles={["user", "admin"]}>
               <About />
-            </RequireAuth>
+            // </RequireAuth>
           }
         />
         <Route
           path="/terms-of-service"
           element={
-            <RequireAuth roles={["user", "admin"]}>
+            // <RequireAuth roles={["user", "admin"]}>
               <TermsOfService />
-            </RequireAuth>
+            // </RequireAuth>
           }
         />
         <Route
           path="/privacy-policy"
           element={
-            <RequireAuth roles={["user", "admin"]}>
+            // <RequireAuth roles={["user", "admin"]}>
               <PrivacyPolicy />
-            </RequireAuth>
+            // </RequireAuth>
           }
         />
       </Routes>
@@ -146,78 +146,3 @@ function App() {
 }
 
 export default App;
-
-// import React, { useState } from "react";
-// import { Routes, Route, Navigate } from "react-router-dom";
-// import Signup from "./pages/Signup";
-// import Login from "./pages/Login";
-// import Home from "./pages/Home";
-// import CarBuy from "./pages/CarBuy";
-// import CarRental from "./pages/CarRental";
-// import RefreshHandler from "./RefreshHandler";
-// import CarDetailPage from "./pages/CarDetailPage";
-// import Contact from "./pages/Contact";
-// import About from "./pages/About";
-// import TermsOfService from "./pages/TermsOfService";
-// import PrivacyPolicy from "./pages/PrivacyPolicy";
-// import BuyandRentForm from "./components/common/BuyandRentForm";
-
-// function App() {
-//   const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-//   const PrivateRoute = ({ element }) => {
-//     return isAuthenticated ? element : <Navigate to="/login" replace />;
-//   };
-
-//   return (
-//     <>
-//       <RefreshHandler setIsAuthenticated={setIsAuthenticated} />
-
-//       <Routes>
-//         <Route path="/" element={<Navigate to="/home" />} />
-//         <Route path="/login" element={<Login />} />
-//         <Route path="/signup" element={<Signup />} />
-//         <Route path="/home" element={<PrivateRoute element={<Home />} />} />
-//         <Route
-//           path="/car-sale"
-//           element={<PrivateRoute element={<CarBuy />} />}
-//         />
-//         <Route
-//           path="/car-rent"
-//           element={<PrivateRoute element={<CarRental />} />}
-//         />
-
-//         <Route
-//           path="/car-sale/:id/detailed"
-//           element={<PrivateRoute element={<CarDetailPage />} />}
-//         />
-//         <Route
-//           path="/car-rent/:id/detailed"
-//           element={<PrivateRoute element={<CarDetailPage />} />}
-//         />
-//         <Route
-//           path="/detailcarform"
-//           element={<PrivateRoute element={<BuyandRentForm />} />}
-//         />
-//         <Route
-//           path="/contact-us"
-//           element={<PrivateRoute element={<Contact />} />}
-//         />
-//         <Route
-//           path="/about-us"
-//           element={<PrivateRoute element={<About />} />}
-//         />
-//         <Route
-//           path="/terms-of-service"
-//           element={<PrivateRoute element={<TermsOfService />} />}
-//         />
-//         <Route
-//           path="/privacy-policy"
-//           element={<PrivateRoute element={<PrivacyPolicy />} />}
-//         />
-//       </Routes>
-//     </>
-//   );
-// }
-
-// export default App;

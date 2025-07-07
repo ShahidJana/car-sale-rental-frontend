@@ -1,367 +1,3 @@
-// import React, { useState, useEffect } from "react";
-// import axios from "axios";
-// import { ToastContainer } from "react-toastify";
-// import { handleError, handleSuccess } from "../../../utils";
-// import { SearchBar } from "../../../components/common/SearchBar";
-// import DetailCard from "../../../components/common/DetailCard";
-
-// const API_URL = "http://localhost:8080/api";
-
-// export default function RentCarDetails() {
-//   const [rentCars, setRentCars] = useState([]);
-//   const [cars, setCars] = useState([]);
-//   const [loading, setLoading] = useState(true);
-//   const [searchTerm, setSearchTerm] = useState("");
-//   const [error, setError] = useState(null);
-//   const [isFormOpen, setIsFormOpen] = useState(false);
-//   const [editingRental, setEditingRental] = useState(null);
-//   const [formData, setFormData] = useState({
-//     _id: null,
-//     name: "",
-//     cnic: "",
-//     phoneNo: "",
-//     address: "",
-//     price: "",
-//     pickupDateTime: "",
-//     dropoffDateTime: "",
-//     carId: "",
-//   });
-
-//   useEffect(() => {
-//     const fetchData = async () => {
-//       try {
-//         const [rentalsRes, carsRes] = await Promise.all([
-//           axios.get(`${API_URL}/rentals/`),
-//           axios.get(`${API_URL}/cars`),
-//         ]);
-//         setRentCars(rentalsRes.data);
-//         setCars(carsRes.data);
-//       } catch (err) {
-//         handleError(err.message);
-//         setError(err.message);
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-//     fetchData();
-//   }, []);
-
-//   const handleDelete = async (id) => {
-//     try {
-//       const res = await axios.delete(`${API_URL}/rentals/${id}`);
-//       setRentCars((prev) => prev.filter((car) => car._id !== id));
-//       handleError(res.data.message);
-//     } catch (err) {
-//       handleError(err.message);
-//     }
-//   };
-
-//   const handleAddClick = () => {
-//     setFormData({
-//       name: "",
-//       cnic: "",
-//       phoneNo: "",
-//       address: "",
-//       price: "",
-//       pickupDateTime: "",
-//       dropoffDateTime: "",
-//       carId: "",
-//     });
-//     setEditingRental(null);
-//     setIsFormOpen(true);
-//   };
-
-//   const handleEdit = (item) => {
-//     setFormData({
-//       name: item.name || "",
-//       cnic: item.cnic || "",
-//       phoneNo: item.phoneNo || "",
-//       address: item.address || "",
-//       price: item.price || "",
-//       pickupDateTime: item.pickupDateTime?.slice(0, 16) || "",
-//       dropoffDateTime: item.dropoffDateTime?.slice(0, 16) || "",
-//       carId: item.carId?._id || "",
-//     });
-//     setEditingRental(item);
-//     setIsFormOpen(true);
-//   };
-
-//   const handleFormSubmit = async (e) => {
-//     e.preventDefault();
-//     console.log('formData',formData)
-//     try {
-//       if (editingRental) {
-//         const response = await axios.put(
-//           `${API_URL}/rentals/${editingRental._id}`,
-//           formData
-//         );
-//         setRentCars((prev) =>
-//           prev.map((r) => (r._id === editingRental._id ? response.data : r))
-//         );
-//         handleSuccess("Rental updated successfully");
-//         await fetchData()
-//       } else {
-//         const response = await axios.post(`${API_URL}/rentals/`, formData);
-//         console.log("Add response:", response.data);
-//         setRentCars((prev) => [...prev, response.data]);
-//         handleSuccess("Rental added successfully");
-//       }
-//       setIsFormOpen(false);
-//     } catch (err) {
-//       handleError(err.message);
-//     }
-//   };
-
-//   const filteredCars = rentCars.filter((car) => {
-//     const carMake = car.carId?.make?.toLowerCase() || "";
-//     const carModel = car.carId?.model?.toLowerCase() || "";
-//     const carYear = car.carId?.year?.toString() || "";
-//     return (
-//       car.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-//       car.cnic?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-//       carMake.includes(searchTerm.toLowerCase()) ||
-//       carModel.includes(searchTerm.toLowerCase()) ||
-//       carYear.includes(searchTerm) ||
-//       car.condition?.toLowerCase().includes(searchTerm.toLowerCase())
-//     );
-//   });
-
-//   const customRender = (item, key) => {
-//     switch (key) {
-//       case "makeModel":
-//         return item.carId ? (
-//           <div className="flex items-center gap-2">
-//             <img
-//               src={
-//                 Array.isArray(item.carId.images)
-//                   ? item.carId.images[0]?.url
-//                   : item.carId.images?.url
-//               }
-//               alt={item.carId.make}
-//               className="w-12 h-12 rounded"
-//             />
-//             <span>{`${item.carId.make} ${item.carId.model}`}</span>
-//           </div>
-//         ) : (
-//           "Car not found"
-//         );
-
-//       case "pickup":
-//         return item.pickupDateTime ? (
-//           <>
-//             {new Date(item.pickupDateTime).toLocaleDateString()} <br />
-//             {new Date(item.pickupDateTime).toLocaleTimeString()}
-//           </>
-//         ) : (
-//           "N/A"
-//         );
-
-//       case "dropoff":
-//         return item.dropoffDateTime ? (
-//           <>
-//             {new Date(item.dropoffDateTime).toLocaleDateString()} <br />
-//             {new Date(item.dropoffDateTime).toLocaleTimeString()}
-//           </>
-//         ) : (
-//           "N/A"
-//         );
-
-//       case "contact":
-//         return (
-//           <div className="w-32 break-words">
-//             {item.phoneNo || "-"} <br /> {item.address || "-"}
-//           </div>
-//         );
-
-//       default:
-//         return item[key] ?? "-";
-//     }
-//   };
-
-//   if (loading) return <div className="p-6">Loading...</div>;
-//   if (error) return <div className="p-6 text-red-500">Error: {error}</div>;
-
-//   return (
-//     <div className="p-6 space-y-6">
-//       {isFormOpen && (
-//         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 p-4 sm:p-6">
-//           <form
-//             onSubmit={handleFormSubmit}
-//             autoComplete="off"
-//             className="bg-white w-full max-w-2xl p-6 rounded shadow-lg overflow-y-auto max-h-[90vh]"
-//           >
-//             <h2 className="text-xl font-semibold mb-4">
-//               {editingRental ? "Edit Rental" : "Add Rental"}
-//             </h2>
-
-//             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-//               {[
-//                 { id: "name", label: "Name", type: "text" },
-//                 { id: "cnic", label: "CNIC", type: "text" },
-//                 { id: "phoneNo", label: "Phone No", type: "text" },
-//                 { id: "address", label: "Address", type: "text" },
-//                 { id: "price", label: "Price", type: "number" },
-//                 {
-//                   id: "pickupDateTime",
-//                   label: "Pickup Date & Time",
-//                   type: "datetime-local",
-//                 },
-//                 {
-//                   id: "dropoffDateTime",
-//                   label: "Drop-off Date & Time",
-//                   type: "datetime-local",
-//                 },
-//               ].map(({ id, label, type }) => (
-//                 <div key={id} className="flex flex-col">
-//                   <label
-//                     htmlFor={id}
-//                     className="mb-1 font-medium text-sm text-gray-700"
-//                   >
-//                     {label}
-//                   </label>
-//                   <input
-//                     id={id}
-//                     type={type}
-//                     placeholder={label}
-//                     value={formData[id]}
-//                     onChange={(e) =>
-//                       setFormData({ ...formData, [id]: e.target.value })
-//                     }
-//                     className="p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-//                     autoComplete="off"
-//                   />
-//                 </div>
-//               ))}
-
-//               <div className="md:col-span-2 flex flex-col">
-//                 <label
-//                   htmlFor="carId"
-//                   className="mb-1 font-medium text-sm text-gray-700"
-//                 >
-//                   Select Car
-//                 </label>
-//                 <select
-//                   id="carId"
-//                   value={formData.carId}
-//                   onChange={(e) =>
-//                     setFormData({ ...formData, carId: e.target.value })
-//                   }
-//                   className="p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-//                 >
-//                   <option value="">Select Car</option>
-//                   {cars
-//                     .filter((car) => car.listingType?.toLowerCase() === "rent")
-//                     .map((car) => (
-//                       <option key={car._id} value={car._id}>
-//                         {car.make} {car.model} ({car.year})
-//                       </option>
-//                     ))}
-//                 </select>
-//               </div>
-//             </div>
-
-//             {formData.carId && (
-//               <div className="mt-4">
-//                 {(() => {
-//                   const selectedCar = cars.find(
-//                     (car) =>
-//                       car._id === formData.carId &&
-//                       car.listingType?.toLowerCase() === "rent"
-//                   );
-
-//                   if (!selectedCar) return null;
-
-//                   return (
-//                     <div className="flex items-center gap-4 bg-gray-100 p-4 rounded">
-//                       <img
-//                         src={
-//                           Array.isArray(selectedCar.images)
-//                             ? selectedCar.images[0]?.url
-//                             : selectedCar.images?.url
-//                         }
-//                         alt="Selected Car"
-//                         className="w-20 h-20 object-cover rounded"
-//                       />
-//                       <div>
-//                         <p>
-//                           {selectedCar.make} {selectedCar.model}
-//                         </p>
-//                         <p className="text-sm text-gray-500">
-//                           Year: {selectedCar.year}
-//                         </p>
-//                       </div>
-//                     </div>
-//                   );
-//                 })()}
-//               </div>
-//             )}
-
-//             <div className="flex gap-4 mt-6">
-//               <button
-//                 type="submit"
-//                 className="bg-blue-600 text-white px-4 py-2 rounded"
-//               >
-//                 {editingRental ? "Update" : "Add"}
-//               </button>
-//               <button
-//                 type="button"
-//                 className="bg-gray-400 text-white px-4 py-2 rounded"
-//                 onClick={() => setIsFormOpen(false)}
-//               >
-//                 Cancel
-//               </button>
-//             </div>
-//           </form>
-//         </div>
-//       )}
-
-//       <DetailCard
-//         title="Rented Cars"
-//         subtitle="All rental booking Details"
-//         totalCarTitles="Rented Cars"
-//         addButtonLabel="Add Rental"
-//         addButtonLink="#"
-//         headers={[
-//           "Make Model",
-//           "Name",
-//           "CNIC",
-//           "Price/day",
-//           "PU Date-Time",
-//           "DO Date-Time",
-//           "Phone No-Address",
-
-//           "Action",
-//         ]}
-//         fieldKeys={[
-//           "makeModel",
-//           "name",
-//           "cnic",
-//           "price",
-//           "pickup",
-//           "dropoff",
-//           "phoneNo",
-//         ]}
-//         data={filteredCars}
-//         iconStyle1="text-green-600 hover:text-white hover:bg-green-600 p-2 rounded"
-//         iconStyle2="text-red-600 hover:text-white hover:bg-red-600 p-2 rounded"
-//         handleDelete={handleDelete}
-//         handleEdit={handleEdit}
-//         onAddClick={handleAddClick}
-//         customRender={customRender}
-//         searchComponent={
-//           <SearchBar
-//             searchTerm={searchTerm}
-//             setSearchTerm={setSearchTerm}
-//             placeholder="Search by make, model, year, name or cnic"
-//           />
-//         }
-//       />
-
-//       <ToastContainer />
-//     </div>
-//   );
-// }
-
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { ToastContainer } from "react-toastify";
@@ -480,6 +116,8 @@ export default function RentCarDetails() {
       handleError("Phone number must be exactly 11 digits.");
       return;
     }
+
+    setLoading(true);
     try {
       if (editingRental) {
         const res = await axios.put(
@@ -504,6 +142,8 @@ export default function RentCarDetails() {
       handleError(
         err.response?.data?.message || err.message || "Submission failed"
       );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -561,26 +201,27 @@ export default function RentCarDetails() {
         );
       case "contact":
         return (
-         <div className="w-28 space-y-1 text-sm text-gray-800">
-  {/* Phone Number (always visible) */}
-  <div className="bg-yellow-400 rounded-md p-1" title="Phone No">{item.phoneNo || "-"}</div>
+          <div className="w-28 space-y-1 text-sm text-gray-800">
+            {/* Phone Number (always visible) */}
+            <div className="bg-yellow-400 rounded-md p-1" title="Phone No">
+              {item.phoneNo || "-"}
+            </div>
 
-  {/* Address Hover Area */}
-  <div className="group relative cursor-default">
-    {/* Truncated Address (shown by default) */}
-    <div
-      className="overflow-hidden transition-opacity duration-150 ease-in-out group-hover:hidden"
-      style={{
-        display: "-webkit-box",
-        WebkitLineClamp: 3,
-        WebkitBoxOrient: "vertical",
-      }}
-    >
-      <span title={item.address}>{item.address || "-"}</span>
-    </div>
-  </div>
-</div>
-
+            {/* Address Hover Area */}
+            <div className="group relative cursor-default">
+              {/* Truncated Address (shown by default) */}
+              <div
+                className="overflow-hidden transition-opacity duration-150 ease-in-out group-hover:hidden"
+                style={{
+                  display: "-webkit-box",
+                  WebkitLineClamp: 3,
+                  WebkitBoxOrient: "vertical",
+                }}
+              >
+                <span title={item.address}>{item.address || "-"}</span>
+              </div>
+            </div>
+          </div>
         );
       default:
         return item[key] ?? "-";
@@ -725,9 +366,20 @@ export default function RentCarDetails() {
             <div className="flex gap-4 mt-6">
               <button
                 type="submit"
-                className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
+                disabled={loading}
+                className={`bg-green-600 text-white px-4 py-2 rounded transition ${
+                  loading
+                    ? "opacity-60 cursor-not-allowed"
+                    : "hover:bg-green-700"
+                }`}
               >
-                {editingRental ? "Update" : "Add"}
+                {loading
+                  ? editingRental
+                    ? "Updating..."
+                    : "Adding..."
+                  : editingRental
+                  ? "Update"
+                  : "Add"}
               </button>
               <button
                 type="button"

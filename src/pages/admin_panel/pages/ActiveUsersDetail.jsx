@@ -12,6 +12,7 @@ export default function UsersDetail() {
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [mode, setMode] = useState("list");
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     _id: null,
     name: "",
@@ -89,10 +90,12 @@ export default function UsersDetail() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { name, email, password, role } = formData;
 
-    if (!name || !email || !password) {
-      return handleError("Name, Email & Password are required");
+    const { name, email, password, role, _id } = formData;
+
+    // 1. Field Validation
+    if (!name || !email) {
+      return handleError("Name and Email are required");
     }
 
     const gmailPattern = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
@@ -100,33 +103,52 @@ export default function UsersDetail() {
       return handleError("Only @gmail.com addresses are allowed");
     }
 
-    if (password.length < 6) {
-      return handleError("Password must be at least 6 digits long");
+    if (!_id && (!password || password.length < 6)) {
+      return handleError("Password must be at least 6 characters long");
     }
+
+    if (_id && password && password.length < 6) {
+      return handleError("Password must be at least 6 characters long");
+    }
+
     if (!role) {
       return handleError("Select the role");
     }
+
+    setLoading(true);
+
     try {
-      if (formData._id) {
-        const { _id, password, ...updateData } = formData;
-        const res = await axios.put(`${API_URL}/user_auth/${_id}`, updateData);
-        handleSuccess(res.data.message);
+      if (_id) {
+        // 2. Update existing user
+        const updatedData = {
+          name,
+          email,
+          role,
+          ...(password && { password }), // only include password if filled
+        };
+
+        const res = await axios.put(`${API_URL}/user_auth/${_id}`, updatedData);
+        handleSuccess(res.data.message || "User updated successfully");
       } else {
-        const res = await axios.post(`${API_URL}/user_auth/signup`, formData);
-        handleSuccess("User Registered Successfully ");
+        // 3. Register new user
+        const res = await axios.post(`${API_URL}/user_auth/signup`, {
+          name,
+          email,
+          password,
+          role,
+        });
+        handleSuccess("User registered successfully");
       }
 
-      await fetchUsers();
-      setMode("list");
+      await fetchUsers(); // optional: refresh user list
+      setMode("list"); // return to user list or other screen
     } catch (err) {
-      // if (err.response && err.response.status === 409) {
-      handleError(
-        "This email already exists. Please try again with a different one." ||
-          err.response.data.message
-      );
-      // } else {
-      //   handleError(err.message || "Something went wrong");
-      // }
+      const msg =
+        err?.response?.data?.message ||
+        "This email already exists. Please try again with a different one.";
+      handleError(msg);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -256,9 +278,22 @@ export default function UsersDetail() {
                   </button>
                   <button
                     type="submit"
-                    className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+                    disabled={loading}
+                    className={`px-4 py-2 rounded text-white transition ${
+                      loading
+                        ? "bg-green-500 cursor-not-allowed"
+                        : "bg-green-600 hover:bg-green-700"
+                    }`}
                   >
-                    {mode === "add" ? "Add" : "Update"}
+                    {loading ? (
+                      <span className="flex items-center justify-center gap-2">
+                        {mode === "add" ? "Adding..." : "Updating..."}
+                      </span>
+                    ) : mode === "add" ? (
+                      "Add"
+                    ) : (
+                      "Update"
+                    )}
                   </button>
                 </div>
               </form>

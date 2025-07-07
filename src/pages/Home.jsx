@@ -121,8 +121,6 @@ const LandingPage = () => {
   const [saleCars, setsaleCars] = useState([]);
   const [rentCars, setrentCars] = useState([]);
   const [activeIndex, setActiveIndex] = useState(0);
-  // const [testimonials, setTestimonials] = useState([]);
-  // const [current, setCurrent] = useState(0);
   useEffect(() => {
     const fetchCars = async () => {
       try {
@@ -136,32 +134,7 @@ const LandingPage = () => {
     };
     fetchCars();
   }, []);
-  // useEffect(() => {
-  //   axios
-  //     .get("http://localhost:8080/api/reviewratings") // Get all reviews
-  //     .then((res) => {
-  //       console.log("reviews", res.data.reviews);
-  //       const fetched = res.data.reviews;
-  //       // .map((r) => ({
-  //       //   quote: r.comment,
-  //       //   author: r.userId?.name || "Anonymous",
-  //       //   rating: r.rating,
-  //       //   // image:
-  //       //   //   r.userId?.profileImage || // you can customize this based on your model
-  //       //   //   "https://via.placeholder.com/100", // fallback avatar
-  //       //   name: r.userId?.name || "Customer",
-  //       // }));
-  //       setTestimonials(fetched);
-  //     })
-  //     .catch((err) => {
-  //       console.error("Error fetching testimonials", err);
-  //     });
-  // }, []);
-
-  // console.log("testimonials", testimonials);
-  // const prevTestimonial = () =>
-  //   setCurrent((current - 1 + testimonials.length) % testimonials.length);
-  // const nextTestimonial = () => setCurrent((current + 1) % testimonials.length);
+  
 
   return (
     <>
@@ -206,42 +179,7 @@ const LandingPage = () => {
           </div>
         </section>
 
-        {/* About Section / Car Companies*/}
         <div className="bg-white py-12 px-4 md:px-16 lg:px-24">
-          {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
-            <div className="rounded-3xl overflow-hidden border p-2">
-              <img
-                src="https://femina.wwmindia.com/content/2021/sep/women-thumb1632797644.jpg"
-                alt="Woman with car keys"
-                className="rounded-2xl object-cover w-full h-full"
-              />
-            </div>
-
-            <div className="rounded-3xl border p-2 md:text-center text-center">
-              <h2 className="text-2xl md:text-3xl text-black font-semibold mb-4">
-                About <span className="text-yellow-600">Us</span>
-              </h2>
-              <p className="text-gray-600 text-sm mb-6">
-                Your trusted source for buying or renting cars. We offer a wide
-                selection, transparent pricing, and flexible financing options,
-                all designed to make your experience smooth and hassle-free.
-              </p>
-              <Link to="/about-us">
-                <button className="bg-green-600 text-sm text-white px-6 py-2 rounded-full hover:bg-green-700 transition">
-                  Learn More
-                </button>
-              </Link>
-            </div>
-
-            <div className="rounded-3xl overflow-hidden border p-2">
-              <img
-                src="https://img.freepik.com/free-photo/portrait-smiling-young-man-rubbing-his-hands_171337-10297.jpg"
-                alt="Man checking car"
-                className="rounded-2xl object-cover w-full h-full"
-              />
-            </div>
-          </div> */}
-
           <div className="mt-12 bg-gray-100 rounded-xl py-6 px-4 flex flex-wrap justify-center items-center gap-8">
             <img
               src="https://www.carlogos.org/logo/Audi-logo-2009-1920x1080.png"
@@ -374,7 +312,6 @@ const LandingPage = () => {
             {/* Left Features */}
             <div className="space-y-10 text-left">
               <div className="flex items-start space-x-4">
-                {/* <img src="/icons/vehicles.svg" alt="icon" className="w-10 h-10" /> */}
                 <FaCarSide className="text-yellow-500 text-4xl" />
                 <div>
                   <h4 className="text-lg font-bold">
@@ -387,7 +324,6 @@ const LandingPage = () => {
                 </div>
               </div>
               <div className="flex items-start space-x-4">
-                {/* <img src="/icons/pricing.svg" alt="icon" className="w-10 h-10" /> */}
                 <FaDollarSign className="text-green-500 text-4xl" />
                 <div>
                   <h4 className="text-lg font-bold">Transparent Pricing</h4>
@@ -420,7 +356,6 @@ const LandingPage = () => {
             {/* Right Features */}
             <div className="space-y-10 text-left">
               <div className="flex items-start space-x-4">
-                {/* <img src="/icons/finance.svg" alt="icon" className="w-10 h-10" /> */}
                 <FaHandsHelping className="text-green-500 text-4xl" />
 
                 <div>
@@ -433,7 +368,6 @@ const LandingPage = () => {
                 </div>
               </div>
               <div className="flex items-start space-x-4">
-                {/* <img src="/icons/support.svg" alt="icon" className="w-10 h-10" /> */}
                 <FaTools className="text-yellow-500 text-4xl" />
 
                 <div>
@@ -500,92 +434,10 @@ const LandingPage = () => {
           </div>
         </div>
 
-        {/* Customer Reviews */}
-        {/* <div className="max-w-7xl m-auto bg-gray-200 rounded-3xl shadow-md my-2 ml-3 mr-3 py-12 px-12 md:px-16 lg:px-24">
-          <h2 className="text-center text-4xl text-gray-800">
-            What our customers are <br />
-            <span className="text-yellow-500">saying</span> about us
-          </h2>
-          <div className="flex items-center justify-between mt-10 relative">
-            <button
-              onClick={prevTestimonial}
-              className="absolute left-0 bg-green-500 text-white p-2 rounded-full hover:bg-green-600"
-            >
-              <FaChevronLeft size={20} />
-            </button>
-
-            <div className="flex items-center gap-6 mx-auto">
-              <div className="hidden md:block">
-                <img
-                  src={
-                    testimonials[
-                      (current - 1 + testimonials.length) % testimonials.length
-                    ].image
-                  }
-                  alt="Previous"
-                  className="rounded-2xl w-40 h-40 object-cover"
-                />
-                <p className="text-black text-sm italic mt-2 ml-2">
-                  {
-                    testimonials[
-                      (current - 1 + testimonials.length) % testimonials.length
-                    ].name
-                  }
-                </p>
-              </div>
-
-              <div className="flex flex-col items-center p-6 rounded-2xl shadow-lg bg-gray-50 max-w-md">
-                <img
-                  src={testimonials[current].image}
-                  alt={testimonials[current].userId.name}
-                  className="w-24 h-24 rounded-full object-cover mb-4"
-                />
-                <p className="text-gray-700 text-center">
-                  {testimonials[current].comment}
-                </p>
-                <p className="mt-4 font-semibold italic text-gray-900">
-                  {testimonials[current].uerId.name}
-                </p>
-                <div className="flex mt-2">
-                  {Array.from(
-                    { length: testimonials[current].rating },
-                    (_, i) => (
-                      <span key={i} className="text-yellow-400 text-xl">
-                        ★
-                      </span>
-                    )
-                  )}
-                </div>
-              </div>
-
-              <div className="hidden md:block">
-                <img
-                  src={testimonials[(current + 1) % testimonials.length].image}
-                  alt="Next"
-                  className="rounded-2xl w-40 h-40 object-cover"
-                />
-                <p className="text-black text-sm italic mt-2 ml-2">
-                  {
-                    testimonials[(current + 1) % testimonials.length].userId
-                      .name
-                  }
-                </p>
-              </div>
-            </div>
-
-            <button
-              onClick={nextTestimonial}
-              className="absolute right-0 bg-green-500 text-white p-2 rounded-full hover:bg-green-600"
-            >
-              <FaChevronRight size={20} />
-            </button>
-          </div>
-        </div> */}
-
         <Testimonials />
 
         {/* Update About Cars */}
-        <section className="px-4 py-10  max-w-6xl mx-auto">
+        {/* <section className="px-4 py-10  max-w-6xl mx-auto">
           <h2 className="text-4xl text-black text-center mb-4">
             Stay Updated with the Latest <br />
             <span className="text-black">Car </span>
@@ -594,7 +446,7 @@ const LandingPage = () => {
           </h2>
 
           <div className="grid md:grid-cols-2 gap-6 mt-10">
-            {/* Featured Article */}
+            
             <div className="relative rounded-xl overflow-hidden shadow-md">
               <img
                 src={FeaturedArticle.image}
@@ -621,7 +473,6 @@ const LandingPage = () => {
               </div>
             </div>
 
-            {/* Other Articles */}
             <div className="flex flex-col gap-6">
               {articles.map((article, idx) => (
                 <div key={idx} className="flex gap-4 items-start">
@@ -649,7 +500,7 @@ const LandingPage = () => {
               ))}
             </div>
           </div>
-        </section>
+        </section> */}
 
         <Footer />
         <ToastContainer />

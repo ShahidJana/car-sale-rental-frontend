@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Header from "../components/layout/Header";
 import Footer from "../components/layout/Footer";
 const API_URL = `http://localhost:8080/api`;
@@ -6,6 +6,7 @@ import { ToastContainer } from "react-toastify";
 import { handleSuccess, handleError } from "../utils";
 
 function Contact() {
+  const [loading, setLoading] = useState(false);
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -15,10 +16,10 @@ function Contact() {
     const message = e.target.message.value;
     const gmailPattern = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
 
-    if (!name && !email && !phone && !message) {
-      return handleError("All fields are required");
-    } else if (!name) {
+    if (!name.trim()) {
       return handleError("Name is required");
+    } else if (!isNaN(name)) {
+      return handleError("Name cannot be a number");
     } else if (!email) {
       return handleError("Email is required");
     } else if (!gmailPattern.test(email)) {
@@ -28,7 +29,7 @@ function Contact() {
     } else if (!message) {
       return handleError("Please write a message");
     }
-
+    setLoading(true);
     try {
       const res = await fetch(`${API_URL}/contact/`, {
         method: "POST",
@@ -37,13 +38,15 @@ function Contact() {
       });
       const data = await res.json();
       if (data.success) {
-        handleSuccess(data.message);
         e.target.reset();
+        handleSuccess(data.message);
       } else {
         handleError(data.error || "Something went wrong.");
       }
     } catch (error) {
       handleError(error);
+    }finally{
+      setLoading(false)
     }
   };
 
@@ -87,47 +90,102 @@ function Contact() {
 
         <form
           onSubmit={handleSubmit}
-          className="grid grid-cols-1 gap-4 bg-white rounded-xl shadow-md p-6"
+          className="w-full max-w-3xl mx-auto grid grid-cols-1 gap-5 bg-white rounded-2xl shadow-lg p-8"
+          autoComplete="off"
         >
-          <input
-            type="text"
-            id="name"
-            name="name"
-            placeholder="Your Name"
-            maxLength={25}
-            className="p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
-          />
-          <input
-            type="email"
-            id="email"
-            name="email"
-            placeholder="Your Email"
-            className="p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
-          />
-          <input
-            type="tel"
-            id="phone"
-            pattern="\d{11}"
-            maxLength={11}
-            name="phone"
-            placeholder="Phone Number (11 digits)"
-            title="Enter 11-digit phone number"
-            className="p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
-          />
-          <textarea
-            rows="4"
-            id="message"
-            name="message"
-            placeholder="Your Message"
-            maxLength={500}
-            className="p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 resize-none"
-          ></textarea>
-          <button
-            type="submit"
-            className="bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700 w-fit"
-          >
-            Send Message
-          </button>
+          {/* Name Field */}
+          <div>
+            <label
+              htmlFor="name"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
+              Your Name
+            </label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              placeholder="e.g. Shahid Hussain"
+              maxLength={25}
+              className="w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
+            />
+          </div>
+
+          {/* Email Field */}
+          <div>
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
+              Your Email
+            </label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder="e.g. shahid@example.com"
+              className="w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
+            />
+          </div>
+
+          {/* Phone Field */}
+          <div>
+            <label
+              htmlFor="phone"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
+              Phone Number
+            </label>
+            <input
+              type="tel"
+              id="phone"
+              name="phone"
+              pattern="\d{11}"
+              maxLength={11}
+              placeholder="11-digit phone number"
+              title="Enter 11-digit phone number"
+              className="w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
+            />
+          </div>
+
+          {/* Message Field */}
+          <div>
+            <label
+              htmlFor="message"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
+              Message
+            </label>
+            <textarea
+              id="message"
+              name="message"
+              rows="5"
+              maxLength={500}
+              placeholder="Type your message here..."
+              className="w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 resize-none"
+            ></textarea>
+          </div>
+
+          {/* Submit Button */}
+          <div className="flex justify-end">
+            <button
+              type="submit"
+              disabled={loading}
+              className={`px-6 py-3 rounded-md text-white transition duration-200 font-medium ${
+                loading
+                  ? "bg-green-500 cursor-not-allowed"
+                  : "bg-green-600 hover:bg-green-700"
+              }`}
+            >
+              {loading ? (
+                <span className="flex items-center justify-center gap-2">
+                  Sending...
+                </span>
+              ) : (
+                "Send Message"
+              )}
+            </button>
+          </div>
         </form>
       </div>
 

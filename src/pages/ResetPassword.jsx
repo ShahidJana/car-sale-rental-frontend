@@ -24,6 +24,7 @@ function ResetPassword() {
       const result = await res.json();
 
       if (result.success) {
+        setPassword("");
         handleSuccess(result.message);
         setTimeout(() => navigate("/login"), 1500);
       } else {
@@ -36,30 +37,6 @@ function ResetPassword() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white font-urbanist">
-      {/* <div className="bg-gray-700 min-h-screen flex justify-center items-center font-urbanist">
-              <div className="bg-white bg-opacity-30 backdrop-blur-md shadow-xl p-10 rounded-2xl w-full max-w-md text-center  ">
-              <h2 className="text-3xl font-bold text-yellow-400 mb-6">
-                Forgot Password <br /> <span className="font-normal mt-4">JANADRIVE</span>
-              </h2>
-              <div className="text-left">
-                <label htmlFor="email" className="block text-sm text-gray-300 mb-1">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  name="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter your email"
-                  className="w-full p-2 text-black mb-4 px-4 py-2 rounded-xl bg-gray-100  focus:outline-none focus:ring-2 focus:ring-yellow-400"
-                />
-              </div>
-              <button className="bg-yellow-400 w-full p-2 rounded-xl text-black font-semibold">
-                Send Reset Link
-              </button>
-              <ToastContainer />
-            </div>
-            </div> */}
       <div className="bg-white bg-opacity-10 backdrop-blur-md shadow-xl p-10 rounded-2xl w-full max-w-md text-center">
         <h2 className="text-3xl font-bold text-yellow-400 mb-6">
           Reset Password <br />{" "}

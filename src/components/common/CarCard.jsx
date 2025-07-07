@@ -49,11 +49,7 @@ const CarCard = ({ car }) => {
           </span>
         </div>
 
-        {/* Description */}
-        {/* {car.description && ( */}
-
-        {/* )} */}
-
+      
         {/* Features Grid */}
         <div className="mt-3 grid grid-cols-2 gap-3 text-sm">
           <div className="flex items-center">
@@ -91,25 +87,7 @@ const CarCard = ({ car }) => {
           <span>{car.color || "Black"}</span>
         </div>
 
-        {/* Features Tags */}
-        {/* {car.features?.length > 0 && (
-          <div className="mt-3 flex flex-wrap gap-1">
-            {car.features.slice(0, 3).map((feature, index) => (
-              <span
-                key={index}
-                className="px-2 py-1 text-xs bg-gray-100 text-gray-700 rounded-md"
-              >
-                {feature}
-              </span>
-            ))}
-            {car.features.length > 3 && (
-              <span className="px-2 py-1 text-xs bg-gray-100 text-gray-700 rounded-md">
-                +{car.features.length - 3} more
-              </span>
-            )}
-          </div>
-        )} */}
-
+       
         {/* Status and Action Buttons */}
         <div className="mt-auto pt-3 flex justify-between items-center border-t border-gray-200">
           <span

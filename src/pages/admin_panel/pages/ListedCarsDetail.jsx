@@ -8,16 +8,13 @@ import DetailCard from "../../../components/common/DetailCard";
 import { SearchBar } from "../../../components/common/SearchBar";
 export default function CarDetails() {
   let [cars, setCars] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const fetchCars = async () => {
     try {
       const response = await axios.get(`${API_URL}/cars`);
       setCars(response.data);
-      setLoading(false);
     } catch (err) {
       handleError(err.message);
-      setLoading(false);
     }
   };
 

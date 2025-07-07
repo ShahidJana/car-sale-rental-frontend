@@ -1,16 +1,3 @@
-// // RefreshHandler.js
-// import { useEffect } from "react";
-
-// const RefreshHandler = ({ setIsAuthenticated, setUserRole }) => {
-//   useEffect(() => {
-//     const isAuth = localStorage.getItem("isAuthenticated") === "true";
-//   }, []);
-
-//   return null;
-// };
-
-// export default RefreshHandler;
-
 import React, { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";

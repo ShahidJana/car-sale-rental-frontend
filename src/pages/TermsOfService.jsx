@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 const TermsOfService = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-r from-black to-gray-900 text-white font-urbanist px-4 py-10">
+    <div className="min-h-screen  bg-gradient-to-r from-black to-gray-900 text-white font-urbanist px-4 py-10">
       <div className="max-w-3xl mx-auto bg-gray-900 p-8 rounded-2xl shadow-lg">
         <h1 className="text-4xl font-bold text-yellow-400 mb-6 text-center">Terms of Service</h1>
 

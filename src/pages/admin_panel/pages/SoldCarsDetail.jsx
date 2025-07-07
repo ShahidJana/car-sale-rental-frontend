@@ -11,7 +11,7 @@ const API_URL = "http://localhost:8080/api";
 export default function SaleCarDetails() {
   const [saleCars, setSaleCars] = useState([]);
   const [cars, setCars] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [error, setError] = useState(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -111,7 +111,7 @@ export default function SaleCarDetails() {
       handleError("Phone number must be exactly 11 digits.");
       return;
     }
-
+    setLoading(true);
     try {
       let res;
       if (editingSale) {
@@ -131,6 +131,8 @@ export default function SaleCarDetails() {
       handleError(
         err.response?.data?.message || err.message || "Submission failed"
       );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -169,8 +171,6 @@ export default function SaleCarDetails() {
             <span>{`${car.make} ${car.model}`}</span>
           </div>
         );
-
-     
 
       case "price":
         return <div className="w-32 break-words">{item.price || "-"}/-</div>;
@@ -378,9 +378,20 @@ export default function SaleCarDetails() {
             <div className="flex gap-4 mt-8">
               <button
                 type="submit"
-                className="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded font-medium"
+                disabled={loading}
+                className={`bg-green-600 text-white px-5 py-2 rounded font-medium transition ${
+                  loading
+                    ? "opacity-60 cursor-not-allowed"
+                    : "hover:bg-green-700"
+                }`}
               >
-                {editingSale ? "Update" : "Add"}
+                {loading
+                  ? editingSale
+                    ? "Updating..."
+                    : "Adding..."
+                  : editingSale
+                  ? "Update"
+                  : "Add"}
               </button>
               <button
                 type="button"

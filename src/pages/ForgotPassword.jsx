@@ -22,7 +22,7 @@ function ForgotPassword() {
 
       const result = await res.json();
       result.success
-        ? handleSuccess(result.message)
+        ? (handleSuccess(result.message), setEmail(""))
         : handleError(result.message);
 
       if (!result.success) {

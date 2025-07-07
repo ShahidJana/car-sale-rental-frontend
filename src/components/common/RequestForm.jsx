@@ -8,8 +8,8 @@ import { handleError, handleSuccess } from "../../utils";
 export default function CarSaleForm() {
   const { state } = useLocation();
   const [searchParams] = useSearchParams();
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-
   const car = state?.car;
   const typeParam = searchParams.get("type");
   const [user, setUser] = useState(null);
@@ -82,7 +82,6 @@ export default function CarSaleForm() {
       return;
     }
 
-   
     if (
       typeParam === "rental" &&
       (!rentalDetails.location ||
@@ -104,7 +103,7 @@ export default function CarSaleForm() {
       address,
     };
 
-     if (!name || !cnic || !phoneNo || !address) {
+    if (!name || !cnic || !phoneNo || !address) {
       handleError("All fields are required.");
       return;
     }
@@ -134,6 +133,7 @@ export default function CarSaleForm() {
         ? "http://localhost:8080/api/rentals/"
         : "http://localhost:8080/api/sales/insert";
 
+    setLoading(true);
     try {
       const res = await axios.post(endpoint, fullPayload);
       handleSuccess(res.data.message || "Submitted successfully.");
@@ -144,6 +144,8 @@ export default function CarSaleForm() {
           error.response?.data?.message ||
           "Submission failed."
       );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -157,18 +159,14 @@ export default function CarSaleForm() {
 
   return (
     <>
-      {/* Car Summary */}
       <div className="max-w-2xl mx-auto bg-white shadow-2xl rounded-3xl overflow-hidden border border-gray-200 relative transition-all duration-300 font-urbanist">
         <h2 className="text-2xl font-semibold text-center text-gray-800 m-4 tracking-tight">
           {typeParam === "rental" ? "Confirm Rental" : "Confirm Purchase"}
         </h2>
 
-        {/* Decorative diagonal line */}
         <div className="absolute top-0 right-0 w-16 h-16 border-t-4 border-r-4 border-gray-900 transform rotate-45 translate-x-8 -translate-y-8 z-10"></div>
 
-        {/* Car Summary */}
         <div className="flex flex-col sm:flex-row gap-6 p-6 bg-gray-50">
-          {/* Image and title */}
           <div className="flex flex-col items-center gap-2 sm:w-1/3">
             <img
               src={car?.images[0]?.url}
@@ -181,13 +179,11 @@ export default function CarSaleForm() {
             </div>
           </div>
 
-          {/* Right content */}
           <div className="flex-1 text-sm text-gray-800">
             <div className="text-base font-bold mb-4 text-green-700 border-b pb-2 border-dashed uppercase tracking-wide">
               Summary
             </div>
 
-            {/* Date and time */}
             {typeParam === "rental" ? (
               <>
                 <div className="flex justify-between text-xs mb-4">
@@ -217,11 +213,9 @@ export default function CarSaleForm() {
                     </div>
                   </div>
                 </div>
-                {/* Address */}
                 <div className="text-xs text-gray-600 mb-3 leading-relaxed">
                   {rentalDetails.location}
                 </div>
-                {/* Km and excess */}
                 <div className="flex justify-between text-xs text-gray-700">
                   <div>
                     <span>Kilometer Limit</span>
@@ -229,7 +223,7 @@ export default function CarSaleForm() {
                   </div>
                   <div>
                     <span>Excess Charges</span>
-                    <div className="font-bold text-sm mt-1">₹10/km</div>
+                    <div className="font-bold text-sm mt-1">₹100/km</div>
                   </div>
                 </div>
               </>
@@ -332,9 +326,24 @@ export default function CarSaleForm() {
             </button>
             <button
               type="submit"
-              className="w-full sm:w-2/3 bg-gradient-to-r from-green-500 to-green-700 hover:from-green-600 hover:to-green-800 text-white py-2 rounded-lg shadow hover:shadow-lg transition duration-300 font-medium text-sm"
+              disabled={loading}
+              className={`w-full sm:w-2/3 text-white py-2 rounded-lg font-medium text-sm transition duration-300 shadow 
+    ${
+      loading
+        ? "bg-green-600 cursor-not-allowed"
+        : "bg-gradient-to-r from-green-500 to-green-700 hover:from-green-600 hover:to-green-800 hover:shadow-lg"
+    }
+  `}
             >
-              {typeParam === "rental" ? "Rent Now" : "Buy Now"}
+              {loading ? (
+                <span className="flex items-center justify-center gap-2">
+                  Processing...
+                </span>
+              ) : typeParam === "rental" ? (
+                "Rent Now"
+              ) : (
+                "Buy Now"
+              )}
             </button>
           </div>
         </form>

@@ -1,16 +1,16 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { handleError, handleSuccess } from "../utils";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
-function Login() {
+const LoginPage = () => {
   const [loginInfo, setLoginInfo] = useState({
     email: "",
     password: "",
   });
-
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -21,19 +21,24 @@ function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
     const { email, password } = loginInfo;
+
     if (!email) return handleError("Email is required");
     if (!password) return handleError("Password is required");
+
     try {
-      const url = "http://localhost:8080/api/user_auth/login";
-      const response = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(loginInfo),
-      });
+      setLoading(true);
+      const response = await fetch(
+        "http://localhost:8080/api/user_auth/login",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(loginInfo),
+        }
+      );
 
       const result = await response.json();
-      console.log(result);
       const { success, message, jwtToken, name, error } = result;
+
       if (success) {
         handleSuccess(message);
         localStorage.setItem("token", jwtToken);
@@ -44,29 +49,35 @@ function Login() {
       } else {
         handleError(message);
       }
-    } catch (error) {
-      handleError(error);
+    } catch (err) {
+      handleError(err.message || "Unexpected error occurred");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="bg-white text-white min-h-screen font-urbanist">
+    <div className="flex flex-col md:flex-row min-h-screen font-urbanist">
+      {/* Left side - Login Form */}
       <div
-        className="min-h-screen bg-gradient-to-r from-black to-gray-900 flex justify-center items-center text-white bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage:
-            "url('https://wallpapercat.com/w/full/8/e/7/607651-3840x2160-desktop-4k-sports-car-background-image.jpg')",
-        }}
+        className="w-full md:w-1/2 flex items-center justify-center"
+        style={{ backgroundImage: "url()" }} 
       >
-        <div className="bg-white bg-opacity-10 backdrop-blur-md shadow-xl p-10 rounded-2xl w-full max-w-md text-center">
+        <div className="bg-opacity-10 backdrop-blur-md shadow-xl p-20 rounded-xl w-full h-full text-center">
           <h2 className="text-3xl font-bold text-yellow-400 mb-6">
-            Login <br /> <span className="font-normal mt-4">JANADRIVE</span>
+            Login <br />
+            <span className="font-normal mt-2 block">JANADRIVE</span>
           </h2>
-          <form onSubmit={handleLogin} className="space-y-6">
+
+          <form
+            onSubmit={handleLogin}
+            className="space-y-6 w-full"
+            autoComplete="off"
+          >
             <div className="text-left">
               <label
                 htmlFor="email"
-                className="block text-sm text-gray-300 mb-1"
+                className="block text-sm text-gray-600 mb-1"
               >
                 Email <span className="text-red-600">*</span>
               </label>
@@ -83,7 +94,7 @@ function Login() {
             <div className="text-left relative">
               <label
                 htmlFor="password"
-                className="block text-sm text-gray-300 mb-1"
+                className="block text-sm text-gray-600 mb-1"
               >
                 Password <span className="text-red-600">*</span>
               </label>
@@ -103,30 +114,48 @@ function Login() {
               </div>
             </div>
 
-            <div className="flex justify-between hover:underline">
-              <p></p>
+            {/* Forgot Password Link */}
+            <div className="flex justify-end text-sm text-gray-300">
               <Link
                 to="/forgot-password"
-                className="text-yellow-400 hover:underline"
+                className="text-yellow-500 hover:underline"
               >
                 Forgot Password?
               </Link>
             </div>
-            <button className="w-full bg-yellow-400 hover:bg-yellow-500 text-black py-2 rounded-xl font-semibold">
-              Login
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              className="w-full bg-yellow-400 hover:bg-yellow-500 text-black py-2 rounded-xl font-semibold disabled:opacity-50"
+              disabled={loading}
+            >
+              {loading ? "Logging in..." : "Login"}
             </button>
           </form>
-          <p className="mt-6 text-sm text-gray-300">
+
+          {/* Signup Link */}
+          <p className="mt-6 text-sm text-gray-600">
             Don’t have an account?{" "}
-            <Link to="/signup" className="text-yellow-400 hover:underline">
+            <Link to="/signup" className="text-yellow-500 hover:underline">
               Signup
             </Link>
           </p>
         </div>
       </div>
+
+      {/* Right side - Static Image */}
+      <div className="hidden md:block w-1/2 relative overflow-hidden">
+        <img
+          src="https://images6.alphacoders.com/116/thumb-1920-1163956.jpg"
+          alt="Car"
+          className="h-full w-full object-cover object-center"
+        />
+      </div>
+
       <ToastContainer />
     </div>
   );
-}
+};
 
-export default Login;
+export default LoginPage;

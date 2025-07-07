@@ -69,6 +69,12 @@ const AdminDashboard = () => {
                 bg: "bg-green-600",
                 hover: "hover:bg-green-700",
               },
+              {
+                to: "/admin-dashboard/active-users",
+                label: "Reviews",
+                bg: "bg-green-600",
+                hover: "hover:bg-green-700",
+              },
             ].map(({ to, label, bg, hover }) => (
               <Link
                 key={to}
