@@ -209,7 +209,7 @@ export default function CarBuy() {
         </section>
 
         {/* Top-rated Section */}
-        {/* <section className="bg-white text-black px-6 py-12">
+        <section className="bg-white text-black px-6 py-12">
           <h2 className="text-4xl text-center">
             <span className="text-yellow-500">Top-rated</span> cars by type
           </h2>
@@ -257,7 +257,7 @@ export default function CarBuy() {
               </div>
             </div>
           </div>
-        </section> */}
+        </section>
 
         <ToastContainer />
       </div>

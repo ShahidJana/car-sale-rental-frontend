@@ -168,6 +168,7 @@ const CarRental = () => {
                         <option value="Murree">Murree</option>
                         <option value="Azad Kashmir">Azad Kashmir</option>
                         <option value="Peshawar">Peshawar</option>
+                        <option value="Lahore">Lahore</option>
                       </>
                     )}
                   </select>

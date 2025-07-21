@@ -333,6 +333,73 @@ const LandingPage = () => {
 
         <Testimonials />
 
+        {/* Update About Cars */}
+        <section className="px-4 py-10  max-w-6xl mx-auto">
+          <h2 className="text-4xl text-black text-center mb-4">
+            Stay Updated with the Latest <br />
+            <span className="text-black">Car </span>
+            <span className="text-yellow-500">Trends</span> and
+            <span className="text-yellow-500"> Tips</span>
+          </h2>
+
+          <div className="grid md:grid-cols-2 gap-6 mt-10">
+            {/* Featured Article */}
+            <div className="relative rounded-xl overflow-hidden shadow-md">
+              <img
+                src={FeaturedArticle.image}
+                alt="Featured"
+                className="w-full h-80 object-cover"
+              />
+              <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/80 to-black/0 text-white p-6">
+                <h3 className="text-xl font-semibold mb-2">
+                  {FeaturedArticle.title}
+                </h3>
+                <p className="text-sm mb-2">{FeaturedArticle.description}</p>
+                <div className="flex items-center justify-between text-sm">
+                  <a
+                    href={FeaturedArticle.link}
+                    className="text-green-400 font-medium"
+                  >
+                    Read More
+                  </a>
+                  <div className="flex items-center gap-1">
+                    <FaCalendarAlt size={16} />
+                    <span>{FeaturedArticle.date}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Other Articles */}
+            <div className="flex flex-col gap-6">
+              {articles.map((article, idx) => (
+                <div key={idx} className="flex gap-4 items-start">
+                  <img
+                    src={article.image}
+                    alt="Thumbnail"
+                    className="w-28 h-24 object-cover rounded-lg"
+                  />
+                  <div>
+                    <div className="flex items-center gap-2 text-gray-500 text-sm">
+                      <FaCalendarAlt size={16} />
+                      <span>{article.date}</span>
+                    </div>
+                    <h4 className="text-base font-medium mt-1">
+                      {article.title}
+                    </h4>
+                    <a
+                      href={article.link}
+                      className="text-green-600 text-sm font-medium mt-1 inline-block"
+                    >
+                      Read More
+                    </a>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
         <ToastContainer />
       </div>
     </>

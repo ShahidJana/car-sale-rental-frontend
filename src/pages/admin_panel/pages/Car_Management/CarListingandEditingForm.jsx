@@ -597,7 +597,7 @@ const CarForm = ({ isEdit = false }) => {
               >
                 {loading ? (
                   <span className="flex items-center justify-center gap-2">
-                    {isEdit ? "Updating..." : "Creating..."}
+                    {isEdit ? "Updating..." : "Listing..."}
                   </span>
                 ) : isEdit ? (
                   "Update Listing"
