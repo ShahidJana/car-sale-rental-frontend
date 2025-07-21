@@ -16,6 +16,7 @@ import AdminRoutes from "./pages/admin_panel/admin_routes/AdminRoutes";
 import ResetPassword from "./pages/ResetPassword";
 import ForgotPassword from "./pages/ForgotPassword";
 import UsedCarSell from "./pages/UsedCarSaleForm";
+import MainLayout from "./components/layout/MainLayout";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -34,14 +35,8 @@ function App() {
         setIsAuthenticated={setIsAuthenticated}
         setUserRole={setUserRole}
       />
-      <Routes>
-        <Route path="/" element={<Navigate to={"/home"} />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/reset-password/:token" element={<ResetPassword />} />
 
-        {/* Protected Admin Route */}
+      <Routes>
         <Route
           path="/admin-dashboard/*"
           element={
@@ -51,95 +46,39 @@ function App() {
           }
         />
 
-        {/* Protected User/Admin Routes */}
-        <Route
-          path="/home"
-          element={
-            // <RequireAuth roles={["user", "admin"]}>
-            <Home />
-            // </RequireAuth>
-          }
-        />
-        <Route
-          path="/car-sale"
-          element={
-            // <RequireAuth roles={["user", "admin"]}>
-            <CarBuy />
-            // </RequireAuth>
-          }
-        />
-        <Route
-          path="/sell-a-car"
-          element={
-            <RequireAuth roles={["user", "admin"]}>
-              <UsedCarSell />
-            </RequireAuth>
-          }
-        />
-        <Route
-          path="/car-rent"
-          element={
-            // <RequireAuth roles={["user", "admin"]}>
-            <CarRental />
-            // </RequireAuth>
-          }
-        />
-        <Route
-          path="/car-sale/:id/detailed"
-          element={
-            // <RequireAuth roles={["user", "admin"]}>
-            <CarDetailPage />
-            // </RequireAuth>
-          }
-        />
-        <Route
-          path="/car-rent/:id/detailed"
-          element={
-            // <RequireAuth roles={["user", "admin"]}>
-            <CarDetailPage />
-            // </RequireAuth>
-          }
-        />
-        <Route
-          path="/detailcarform"
-          element={
-            <RequireAuth roles={["user", "admin"]}>
-              <RequestForm />
-             </RequireAuth>
-          }
-        />
-        <Route
-          path="/contact-us"
-          element={
-            // <RequireAuth roles={["user", "admin"]}>
-              <Contact />
-            // </RequireAuth>
-          }
-        />
-        <Route
-          path="/about-us"
-          element={
-            // <RequireAuth roles={["user", "admin"]}>
-              <About />
-            // </RequireAuth>
-          }
-        />
-        <Route
-          path="/terms-of-service"
-          element={
-            // <RequireAuth roles={["user", "admin"]}>
-              <TermsOfService />
-            // </RequireAuth>
-          }
-        />
-        <Route
-          path="/privacy-policy"
-          element={
-            // <RequireAuth roles={["user", "admin"]}>
-              <PrivacyPolicy />
-            // </RequireAuth>
-          }
-        />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password/:token" element={<ResetPassword />} />
+
+        <Route element={<MainLayout />}>
+          <Route path="/" element={<Navigate to="/home" />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/car-sale" element={<CarBuy />} />
+          <Route path="/car-rent" element={<CarRental />} />
+          <Route path="/car-sale/:id/detailed" element={<CarDetailPage />} />
+          <Route path="/car-rent/:id/detailed" element={<CarDetailPage />} />
+          <Route path="/about-us" element={<About />} />
+          <Route path="/contact-us" element={<Contact />} />
+          <Route path="/terms-of-service" element={<TermsOfService />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route
+            path="/sell-a-car"
+            element={
+              <RequireAuth roles={["user", "admin"]}>
+                <UsedCarSell />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/detailcarform"
+            element={
+              <RequireAuth roles={["user", "admin"]}>
+                <RequestForm />
+              </RequireAuth>
+            }
+          />
+        </Route>
       </Routes>
     </>
   );

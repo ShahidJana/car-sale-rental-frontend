@@ -159,7 +159,7 @@ export default function CarSaleForm() {
 
   return (
     <>
-      <div className="max-w-2xl mx-auto bg-white shadow-2xl rounded-3xl overflow-hidden border border-gray-200 relative transition-all duration-300 font-urbanist">
+      <div className="max-w-full mx-auto bg-white shadow-2xl rounded-3xl overflow-hidden border border-gray-200 relative transition-all duration-300 font-urbanist">
         <h2 className="text-2xl font-semibold text-center text-gray-800 m-4 tracking-tight">
           {typeParam === "rental" ? "Confirm Rental" : "Confirm Purchase"}
         </h2>

@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import Footer from "../components/layout/Footer";
-import Header from "../components/layout/Header";
 
 export default function AboutUs() {
   const [activeTab, setActiveTab] = useState("values");
@@ -86,9 +84,6 @@ export default function AboutUs() {
 
   return (
     <div className="bg-white text-black min-h-screen font-urbanist">
-      {/* Header Section */}
-      <Header />
-
       {/* Hero Section */}
       <section
         className="relative w-full h-[90vh] bg-cover bg-center"
@@ -221,9 +216,6 @@ export default function AboutUs() {
           </div>
         </div>
       </section>
-
-      {/* Footer */}
-      <Footer />
     </div>
   );
 }

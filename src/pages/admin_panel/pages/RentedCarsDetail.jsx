@@ -163,7 +163,10 @@ export default function RentCarDetails() {
     switch (key) {
       case "makeModel":
         return car.make ? (
-          <div className="flex items-center gap-2">
+          <div
+            className="flex items-center gap-2"
+            title={`${car.make} ${car.model} `}
+          >
             <img
               src={
                 Array.isArray(car.images) ? car.images[0]?.url : car.images?.url
@@ -171,9 +174,6 @@ export default function RentCarDetails() {
               alt={car.make}
               className="w-12 h-12 rounded"
             />
-            <span>
-              {car.make} {car.model}
-            </span>
           </div>
         ) : (
           "N/A"
@@ -181,11 +181,17 @@ export default function RentCarDetails() {
       case "price":
         return <div className="w-32 break-words">{item.price || "-"}</div>;
 
+      case "location":
+        return <div className="w-32 break-words">{item.location || "-"}</div>;
+
       case "pickup":
         return item.pickupDateTime ? (
           <>
             {new Date(item.pickupDateTime).toLocaleDateString()} <br />
-            {new Date(item.pickupDateTime).toLocaleTimeString()}
+            {new Date(item.pickupDateTime).toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
           </>
         ) : (
           "N/A"
@@ -194,7 +200,10 @@ export default function RentCarDetails() {
         return item.dropoffDateTime ? (
           <>
             {new Date(item.dropoffDateTime).toLocaleDateString()} <br />
-            {new Date(item.dropoffDateTime).toLocaleTimeString()}
+            {new Date(item.dropoffDateTime).toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
           </>
         ) : (
           "N/A"
@@ -394,6 +403,9 @@ export default function RentCarDetails() {
       )}
 
       <DetailCard
+        header_rows="grid-cols-9"
+        data_rows="md:grid-cols-9"
+        columns="9"
         title="Rented Cars"
         subtitle="All rental booking details"
         totalCarTitles="Rented Cars"
@@ -404,6 +416,7 @@ export default function RentCarDetails() {
           "Name",
           "CNIC",
           "Price/day",
+          "Location",
           "PU Date-Time",
           "DO Date-Time",
           "Phone No-Address",
@@ -414,6 +427,7 @@ export default function RentCarDetails() {
           "name",
           "cnic",
           "price",
+          "location",
           "pickup",
           "dropoff",
           "contact",

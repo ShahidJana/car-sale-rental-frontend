@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FiEdit, FiTrash } from "react-icons/fi";
 
@@ -25,6 +25,26 @@ const DetailCard = ({
   customRender = null,
 }) => {
   const navigate = useNavigate();
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState(null);
+
+  const confirmDelete = (id) => {
+    setItemToDelete(id);
+    setShowConfirmModal(true);
+  };
+
+  const executeDelete = () => {
+    if (itemToDelete) {
+      handleDelete(itemToDelete);
+    }
+    setShowConfirmModal(false);
+    setItemToDelete(null);
+  };
+
+  const cancelDelete = () => {
+    setShowConfirmModal(false);
+    setItemToDelete(null);
+  };
 
   const defaultRender = (item, key) => {
     if (!item) return "-";
@@ -90,7 +110,6 @@ const DetailCard = ({
 
     return item[key] ?? "-";
   };
-  
 
   const handleAddNavigation = () => {
     onAddClick();
@@ -112,12 +131,14 @@ const DetailCard = ({
           <h1 className="text-3xl font-bold">{title}</h1>
           <p className="text-base text-gray-500">{subtitle}</p>
         </div>
-        <button
-          onClick={handleAddNavigation}
-          className="bg-green-600 hover:bg-green-700 text-white px-5 py-3 rounded-lg text-lg font-medium"
-        >
-          {addButtonLabel}
-        </button>
+        {addButtonLabel && (
+          <button
+            onClick={handleAddNavigation}
+            className="bg-green-600 hover:bg-green-700 text-white px-5 py-3 rounded-lg text-lg font-medium"
+          >
+            {addButtonLabel}
+          </button>
+        )}
       </div>
 
       {/* Count */}
@@ -162,7 +183,7 @@ const DetailCard = ({
               ))}
 
               {/* Actions */}
-              <div className="flex justify-start md:justify-end gap-3 col-span-1">
+              <div className="flex justify-start md:justify-start gap-3 col-span-1">
                 <button
                   onClick={() => handleEditNavigation(item)}
                   className={iconStyle1}
@@ -171,7 +192,7 @@ const DetailCard = ({
                   <FiEdit className="text-lg" />
                 </button>
                 <button
-                  onClick={() => handleDelete(item._id)}
+                  onClick={() => confirmDelete(item._id)}
                   className={iconStyle2}
                   title="Delete"
                 >
@@ -186,6 +207,30 @@ const DetailCard = ({
           </p>
         )}
       </div>
+
+      {/* Confirmation Modal */}
+      {showConfirmModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white rounded-lg shadow-xl p-6 max-w-md w-full text-center">
+            <h2 className="text-xl font-semibold mb-4">Confirm Deletion</h2>
+            <p className="mb-6">Are you sure you want to delete this item?</p>
+            <div className="flex justify-center gap-4">
+              <button
+                onClick={executeDelete}
+                className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+              >
+                Yes, Delete
+              </button>
+              <button
+                onClick={cancelDelete}
+                className="bg-gray-300 text-black px-4 py-2 rounded hover:bg-gray-400"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

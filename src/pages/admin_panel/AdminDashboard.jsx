@@ -70,7 +70,7 @@ const AdminDashboard = () => {
                 hover: "hover:bg-green-700",
               },
               {
-                to: "/admin-dashboard/active-users",
+                to: "/admin-dashboard/reviews",
                 label: "Reviews",
                 bg: "bg-green-600",
                 hover: "hover:bg-green-700",

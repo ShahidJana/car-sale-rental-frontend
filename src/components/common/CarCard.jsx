@@ -28,10 +28,10 @@ const CarCard = ({ car }) => {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         {/* Top Badges */}
-        <div className="absolute top-2 left-2 flex items-center bg-yellow-100 px-3 py-1 rounded-full text-xs  text-yellow-700 shadow-md">
+        {/* <div className="absolute top-2 left-2 flex items-center bg-yellow-100 px-3 py-1 rounded-full text-xs  text-yellow-700 shadow-md"> */}
           {/* <FiStar className="text-yellow-400 mr-1" /> */}
-          {car.condition || ""}
-        </div>
+          {/* {car.condition || ""} */}
+        {/* </div> */}
         <div className="absolute top-2 right-2 bg-gradient-to-r from-green-600 to-green-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">
           ₹{car.price?.toLocaleString() || "N/A"}/-
         </div>

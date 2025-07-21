@@ -150,7 +150,7 @@ const CarForm = ({ isEdit = false }) => {
         ["image/jpeg", "image/png", "image/webp", "image/jpg"].includes(
           file.type
         ) && file.size <= 5 * 1024 * 1024;
-      if (!isValid) handleError(`Invalid or too large: ${file.name}`);
+      if (!isValid) handleError(`Invalid or too large (image size must be less than 5MB): ${file.name}`);
       return isValid;
     });
     setImages((prev) => [...prev, ...validFiles]);

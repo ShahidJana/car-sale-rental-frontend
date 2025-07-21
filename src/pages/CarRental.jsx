@@ -2,8 +2,6 @@ import React, { useState, useRef } from "react";
 import { LuCrown, LuHeartHandshake } from "react-icons/lu";
 import { GoVerified } from "react-icons/go";
 import CarCard from "../components/common/CarCard";
-import Header from "../components/layout/Header";
-import Footer from "../components/layout/Footer";
 import Pagination from "../components/common/Pagination";
 import { fetchCars } from "../services/CarService";
 import { handleError } from "../utils";
@@ -19,12 +17,18 @@ const CarRental = () => {
     dropoffDate: "",
     dropoffTime: "",
   });
+  const [rentalType, setRentalType] = useState("within");
+  const [showTerms, setShowTerms] = useState(false);
   const resultRef = useRef(null);
   const bookRef = useRef(null);
 
   const handleChange = (e) => {
     const { id, value } = e.target;
     setFormData((prev) => ({ ...prev, [id]: value }));
+  };
+  const handleRadioChange = (e) => {
+    setRentalType(e.target.value);
+    setFormData((prev) => ({ ...prev, location: "" }));
   };
 
   const handleSubmit = async (e) => {
@@ -91,7 +95,6 @@ const CarRental = () => {
 
   return (
     <div className="bg-white text-white min-h-screen font-urbanist">
-      <Header />
       {/* Hero Section */}
       <div
         className="relative h-screen w-full bg-cover bg-center"
@@ -110,57 +113,102 @@ const CarRental = () => {
           </p>
 
           {/* Rental Form */}
-          <div className="mt-40 px-4 overflow-x-auto">
+          <div className="mt-56 px-4 overflow-x-auto" ref={bookRef}>
             <form
               onSubmit={handleSubmit}
               className="flex flex-wrap items-end gap-2 justify-center"
-              ref={bookRef}
             >
-              <div className="w-40">
-                <select
-                  id="location"
-                  onChange={handleChange}
-                  className="p-2 rounded-xl text-black w-full border border-gray-300"
-                  defaultValue=""
-                >
-                  <option value="" disabled>
-                    Location/City
-                  </option>
-                  <option value="Islamabad">Islamabad</option>
-                  <option value="Rawalpindi">Rawalpindi</option>
-                </select>
+              {/* Radio buttons */}
+              <div className="w-full flex justify-center gap-6 mb-2">
+                <label className="flex items-center gap-2">
+                  <input
+                    type="radio"
+                    name="rentalType"
+                    value="within"
+                    checked={rentalType === "within"}
+                    onChange={handleRadioChange}
+                    className="accent-green-600"
+                  />
+                  Within City
+                </label>
+
+                <label className="flex items-center gap-2">
+                  <input
+                    type="radio"
+                    name="rentalType"
+                    value="out"
+                    checked={rentalType === "out"}
+                    onChange={handleRadioChange}
+                    className="accent-green-600"
+                  />
+                  Out of City
+                </label>
               </div>
 
+              {rentalType && (
+                <div className="w-40">
+                  <select
+                    id="location"
+                    value={formData.location}
+                    onChange={handleChange}
+                    className="p-2 rounded-xl text-black w-full focus:border-green-600 focus:outline-none border-2 border-gray-300"
+                  >
+                    <option value="" disabled>
+                      {rentalType === "within"
+                        ? "Select City"
+                        : "Select Destination"}
+                    </option>
+                    {rentalType === "within" ? (
+                      <>
+                        <option value="Islamabad">Islamabad</option>
+                        <option value="Rawalpindi">Rawalpindi</option>
+                      </>
+                    ) : (
+                      <>
+                        <option value="Murree">Murree</option>
+                        <option value="Azad Kashmir">Azad Kashmir</option>
+                        <option value="Peshawar">Peshawar</option>
+                      </>
+                    )}
+                  </select>
+                </div>
+              )}
+
+              {/* Date pickers */}
               {["pickupDate", "dropoffDate"].map((id) => (
                 <div className="w-40" key={id}>
                   <input
                     id={id}
                     type="text"
+                    value={formData[id]}
                     placeholder={
                       id === "pickupDate" ? "Pick-up Date" : "Drop-off Date"
                     }
                     onFocus={(e) => setInputType(e, "date")}
                     onChange={handleChange}
-                    className="p-2 rounded-xl text-black w-full border border-gray-300 placeholder:text-black"
+                    className="p-2 rounded-xl text-black w-full focus:border-green-600 focus:outline-none border-2 border-gray-300 placeholder:text-black"
                   />
                 </div>
               ))}
 
+              {/* Time pickers */}
               {["pickupTime", "dropoffTime"].map((id) => (
                 <div className="w-40" key={id}>
                   <input
                     id={id}
                     type="text"
+                    value={formData[id]}
                     placeholder={
                       id === "pickupTime" ? "Pick-up Time" : "Drop-off Time"
                     }
                     onFocus={(e) => setInputType(e, "time")}
                     onChange={handleChange}
-                    className="p-2 rounded-xl text-black w-full border border-gray-300 placeholder:text-black"
+                    className="p-2 rounded-xl text-black w-full focus:border-green-600 focus:outline-none border-2 border-gray-300 placeholder:text-black"
                   />
                 </div>
               ))}
 
+              {/* Submit */}
               <div className="w-40">
                 <button
                   type="submit"
@@ -189,9 +237,120 @@ const CarRental = () => {
             />
           </>
         ) : (
-          <div className="bg-green-600 rounded-lg py-2 px-2 text-center text-white">
-            To search or book a car, please fill in all the above fields
-          </div>
+          <>
+            <div className="bg-green-600 rounded-lg py-2 px-2 text-center text-white">
+              To search or book a car, please fill in all the above fields
+            </div>
+            <div className="p-4">
+              {/* Toggle Button */}
+              <button
+                onClick={() => setShowTerms(!showTerms)}
+                className="text-green-700 font-medium mb-2"
+              >
+                <h1 className="text-2xl font-bold text-green-700">
+                  Terms & Conditions
+                </h1>
+              </button>
+
+              {/* Terms Content */}
+              {showTerms && (
+                <div className="bg-white rounded shadow space-y-8 p-6 border mt-2">
+                  {/* Left and Right Columns */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    {/* Within City */}
+                    <div>
+                      <h2 className="text-xl font-semibold text-gray-800 mb-2">
+                        Within City
+                      </h2>
+                      <ul className="list-disc list-inside space-y-2 text-gray-700">
+                        <li>Car must remain within city limits.</li>
+                        <li>
+                          Not allowed for off-road or commercial use (e.g.,
+                          delivery, ride-hailing).
+                        </li>
+                        <li>
+                          Fuel is not included in the rental price; return with
+                          same fuel level.
+                        </li>
+                        <li>Driver must be 21+ with valid CNIC and license.</li>
+                        <li>
+                          Only the registered driver may operate the vehicle.
+                        </li>
+                        <li>
+                          Damage during rental is renter’s responsibility.
+                        </li>
+                        <li>
+                          Late return fee: Rs. 500/hour after 30-minute grace
+                          period.
+                        </li>
+                        <li>
+                          Refundable security deposit required before handover.
+                        </li>
+                      </ul>
+                    </div>
+
+                    {/* Out of City */}
+                    <div>
+                      <h2 className="text-xl font-semibold text-gray-800 mb-2">
+                        Out of City
+                      </h2>
+                      <ul className="list-disc list-inside space-y-2 text-gray-700">
+                        <li>
+                          <strong>
+                            A company-provided driver is mandatory for
+                            out-of-city.
+                          </strong>
+                        </li>
+                        <li>Minimum rental duration: 24 hours.</li>
+                        <li>Advance notice of 12 hours required.</li>
+                        <li>Not allowed in restricted or dangerous zones.</li>
+                        <li>
+                          Fuel and tolls paid by customer; submit toll receipts
+                          upon return.
+                        </li>
+                        <li>
+                          Declare travel destinations before journey begins.
+                        </li>
+                        <li>Unauthorized areas may lead to penalties.</li>
+                        <li>
+                          In case of emergency, contact support immediately.
+                        </li>
+                        <li>
+                          Secure overnight parking is renter's responsibility.
+                        </li>
+                        <li>
+                          Driver charges are included separately and must be
+                          paid in advance.
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  {/* General Rules */}
+                  <div>
+                    <h2 className="text-xl font-semibold text-gray-800 mb-2">
+                      ⚠️ General Rules
+                    </h2>
+                    <ul className="list-disc list-inside space-y-2 text-gray-700">
+                      <li>No smoking or alcohol inside the vehicle.</li>
+                      <li>
+                        Illegal activities using the car are strictly
+                        prohibited.
+                      </li>
+                      <li>
+                        All traffic fines or challans must be paid by the
+                        renter.
+                      </li>
+                      <li>
+                        We reserve the right to cancel rentals for misuse or
+                        violations.
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              )}
+            </div>
+          </>
         )}
       </div>
 
@@ -315,7 +474,6 @@ const CarRental = () => {
           </div>
         </div>
       </div>
-      <Footer />
       <ToastContainer />
     </div>
   );

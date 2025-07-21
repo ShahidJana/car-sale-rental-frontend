@@ -160,7 +160,10 @@ export default function SaleCarDetails() {
       case "makeModel":
         if (!car) return "Loading car data...";
         return (
-          <div className="flex items-center gap-2">
+          <div
+            className="flex items-center gap-2"
+            title={`${car.make} ${car.model}`}
+          >
             <img
               src={
                 Array.isArray(car.images) ? car.images[0]?.url : car.images?.url
@@ -168,7 +171,6 @@ export default function SaleCarDetails() {
               alt={`${car.make} ${car.model}`}
               className="w-12 h-12 rounded object-cover"
             />
-            <span>{`${car.make} ${car.model}`}</span>
           </div>
         );
 
@@ -181,7 +183,10 @@ export default function SaleCarDetails() {
         return (
           <>
             {date.toLocaleDateString()} <br />
-            {date.toLocaleTimeString()}
+            {date.toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
           </>
         );
 

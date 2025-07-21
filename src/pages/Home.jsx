@@ -11,110 +11,11 @@ import {
   FaChevronRight,
   FaCalendarAlt,
 } from "react-icons/fa";
-import Footer from "../components/layout/Footer";
-import Header from "../components/layout/Header";
 import Testimonials from "../components/common/Testimonials";
 import axios from "axios";
 import { ToastContainer } from "react-toastify";
 import { handleError } from "../utils";
 
-const faqs = [
-  {
-    question: "How do I buy a car from your website?",
-    answer:
-      "You can browse our inventory online, select a car you like, and either purchase it directly or schedule a test drive at one of our locations.",
-  },
-  {
-    question: "What financing options do you offer?",
-    answer:
-      "We work with multiple lenders to provide competitive financing options, including loans and leases with various term lengths.",
-  },
-  {
-    question: "Can I return a car if I'm not satisfied?",
-    answer:
-      "We offer a 7-day return policy on most vehicles with certain restrictions. Please check our return policy for details.",
-  },
-  {
-    question: "Do you offer international shipping?",
-    answer:
-      "Yes, we can arrange international shipping for most vehicles. Additional fees and paperwork will apply.",
-  },
-];
-
-const articles = [
-  {
-    title: "Electric Vehicles: The Future of Driving",
-    date: "May 15, 2023",
-    image:
-      "https://muxtech.com.pk/wp-content/uploads/2025/01/How-to-buy-a-used-car.webp",
-    link: "#",
-  },
-  {
-    title: "Top 10 Luxury Cars of 2023",
-    date: "April 28, 2023",
-    image:
-      "https://muxtech.com.pk/wp-content/uploads/2025/01/How-to-buy-a-used-car.webp",
-    link: "#",
-  },
-  {
-    title: "How to Maintain Your Car's Value",
-    date: "March 10, 2023",
-    image:
-      "https://muxtech.com.pk/wp-content/uploads/2025/01/How-to-buy-a-used-car.webp",
-    link: "#",
-  },
-];
-
-const FeaturedArticle = {
-  title: "The Complete Guide to Buying a Used Car",
-  description:
-    "Learn everything you need to know about purchasing a pre-owned vehicle with confidence.",
-  date: "June 2, 2023",
-  image:
-    "https://muxtech.com.pk/wp-content/uploads/2025/01/How-to-buy-a-used-car.webp",
-  link: "#",
-};
-
-const CarCard = ({ car }) => {
-  return (
-    <div
-      className={`rounded-xl p-6 flex flex-col justify-between shadow-md
-         bg-white text-black`}
-    >
-      <div className="flex justify-between items-start">
-        <h2 className="text-xl font-semibold">
-          {car.make}
-          {car.model}
-        </h2>
-        <div
-          className={`w-10 h-10 rounded-full flex items-center justify-center 
-              bg-green-600 text-white
-          `}
-        >
-          <FaChevronUp size={20} />
-        </div>
-      </div>
-      <div className="mt-4">
-        <p>
-          <span className="font-semibold">Price:</span>{" "}
-          <span className={""}>{car.price}</span>
-        </p>
-        <p>
-          <span className="font-semibold">Mileage:</span>{" "}
-          <span className={""}>{car.mileage}</span>
-        </p>
-        {/* <p className="mt-2 text-sm">{car.description}</p> */}
-      </div>
-      {car.images?.length > 0 && car.images[0]?.url && (
-        <img
-          src={car.images[0].url}
-          alt={car.title || "Car image"}
-          className="w-full h-40 object-contain mt-4"
-        />
-      )}
-    </div>
-  );
-};
 
 const LandingPage = () => {
   const [cars, setCars] = useState([]);
@@ -134,14 +35,10 @@ const LandingPage = () => {
     };
     fetchCars();
   }, []);
-  
 
   return (
     <>
       <div className="min-h-screen bg-white text-white font-urbanist">
-        {/* Header */}
-        <Header />
-
         {/* Hero Section */}
         <section
           className="relative text-center py-24 px-4 md:px-10 bg-cover bg-center bg-no-repeat"
@@ -231,7 +128,7 @@ const LandingPage = () => {
           </div>
 
           <div className="grid md:grid-cols-3 gap-6">
-            {saleCars.map((car) => (
+            {saleCars.slice(0, 3).map((car) => (
               <Link to="/car-sale" key={car._id}>
                 <CarCard car={car} />
               </Link>
@@ -259,7 +156,7 @@ const LandingPage = () => {
             </Link>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {rentCars.map((car, index) => (
+            {rentCars.slice(0, 3).map((car, index) => (
               <div
                 key={car._id}
                 className="bg-white text-black rounded-2xl overflow-hidden shadow-lg flex flex-col"
@@ -271,12 +168,12 @@ const LandingPage = () => {
                 />
                 <div className="p-4">
                   <h3 className="text-lg font-semibold">
-                    {car.make}
-                    {car.model}
+                    {car.make} {car.model}
                   </h3>
                   <div className="flex justify-between text-sm text-gray-700 mt-2">
                     <div>
                       <span className="font-semibold">Price:</span> {car.price}
+                      /day
                     </div>
                     <div>
                       <span className="font-semibold">Mileage:</span>{" "}
@@ -436,73 +333,6 @@ const LandingPage = () => {
 
         <Testimonials />
 
-        {/* Update About Cars */}
-        {/* <section className="px-4 py-10  max-w-6xl mx-auto">
-          <h2 className="text-4xl text-black text-center mb-4">
-            Stay Updated with the Latest <br />
-            <span className="text-black">Car </span>
-            <span className="text-yellow-500">Trends</span> and
-            <span className="text-yellow-500"> Tips</span>
-          </h2>
-
-          <div className="grid md:grid-cols-2 gap-6 mt-10">
-            
-            <div className="relative rounded-xl overflow-hidden shadow-md">
-              <img
-                src={FeaturedArticle.image}
-                alt="Featured"
-                className="w-full h-80 object-cover"
-              />
-              <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/80 to-black/0 text-white p-6">
-                <h3 className="text-xl font-semibold mb-2">
-                  {FeaturedArticle.title}
-                </h3>
-                <p className="text-sm mb-2">{FeaturedArticle.description}</p>
-                <div className="flex items-center justify-between text-sm">
-                  <a
-                    href={FeaturedArticle.link}
-                    className="text-green-400 font-medium"
-                  >
-                    Read More
-                  </a>
-                  <div className="flex items-center gap-1">
-                    <FaCalendarAlt size={16} />
-                    <span>{FeaturedArticle.date}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-6">
-              {articles.map((article, idx) => (
-                <div key={idx} className="flex gap-4 items-start">
-                  <img
-                    src={article.image}
-                    alt="Thumbnail"
-                    className="w-28 h-24 object-cover rounded-lg"
-                  />
-                  <div>
-                    <div className="flex items-center gap-2 text-gray-500 text-sm">
-                      <FaCalendarAlt size={16} />
-                      <span>{article.date}</span>
-                    </div>
-                    <h4 className="text-base font-medium mt-1">
-                      {article.title}
-                    </h4>
-                    <a
-                      href={article.link}
-                      className="text-green-600 text-sm font-medium mt-1 inline-block"
-                    >
-                      Read More
-                    </a>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section> */}
-
-        <Footer />
         <ToastContainer />
       </div>
     </>
@@ -510,3 +340,100 @@ const LandingPage = () => {
 };
 
 export default LandingPage;
+
+const faqs = [
+  {
+    question: "How do I buy a car from your website?",
+    answer:
+      "You can browse our inventory online, select a car you like, and either purchase it directly or schedule a test drive at one of our locations.",
+  },
+  {
+    question: "What financing options do you offer?",
+    answer:
+      "We work with multiple lenders to provide competitive financing options, including loans and leases with various term lengths.",
+  },
+  {
+    question: "Can I return a car if I'm not satisfied?",
+    answer:
+      "We offer a 7-day return policy on most vehicles with certain restrictions. Please check our return policy for details.",
+  },
+  {
+    question: "Do you offer international shipping?",
+    answer:
+      "Yes, we can arrange international shipping for most vehicles. Additional fees and paperwork will apply.",
+  },
+];
+
+const articles = [
+  {
+    title: "Electric Vehicles: The Future of Driving",
+    date: "May 15, 2023",
+    image:
+      "https://muxtech.com.pk/wp-content/uploads/2025/01/How-to-buy-a-used-car.webp",
+    link: "#",
+  },
+  {
+    title: "Top 10 Luxury Cars of 2023",
+    date: "April 28, 2023",
+    image:
+      "https://muxtech.com.pk/wp-content/uploads/2025/01/How-to-buy-a-used-car.webp",
+    link: "#",
+  },
+  {
+    title: "How to Maintain Your Car's Value",
+    date: "March 10, 2023",
+    image:
+      "https://muxtech.com.pk/wp-content/uploads/2025/01/How-to-buy-a-used-car.webp",
+    link: "#",
+  },
+];
+
+const FeaturedArticle = {
+  title: "The Complete Guide to Buying a Used Car",
+  description:
+    "Learn everything you need to know about purchasing a pre-owned vehicle with confidence.",
+  date: "June 2, 2023",
+  image:
+    "https://muxtech.com.pk/wp-content/uploads/2025/01/How-to-buy-a-used-car.webp",
+  link: "#",
+};
+
+const CarCard = ({ car }) => {
+  return (
+    <div
+      className={`rounded-xl p-6 flex flex-col justify-between shadow-md
+         bg-white text-black`}
+    >
+      <div className="flex justify-between items-start">
+        <h2 className="text-xl font-semibold">
+          {car.make} {car.model}
+        </h2>
+        <div
+          className={`w-10 h-10 rounded-full flex items-center justify-center 
+              bg-green-600 text-white
+          `}
+        >
+          <FaChevronUp size={20} />
+        </div>
+      </div>
+      <div className="mt-4">
+        <p>
+          <span className="font-semibold">Price:</span>{" "}
+          <span className={""}>{car.price}</span>
+        </p>
+        <p>
+          <span className="font-semibold">Mileage:</span>{" "}
+          <span className={""}>{car.mileage}</span>
+        </p>
+        {/* <p className="mt-2 text-sm">{car.description}</p> */}
+      </div>
+      {car.images?.length > 0 && car.images[0]?.url && (
+        <img
+          src={car.images[0].url}
+          alt={car.title || "Car image"}
+          className="w-full h-40 object-contain mt-4"
+        />
+      )}
+    </div>
+  );
+};

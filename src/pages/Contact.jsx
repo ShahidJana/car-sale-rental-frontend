@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import Header from "../components/layout/Header";
-import Footer from "../components/layout/Footer";
 const API_URL = `http://localhost:8080/api`;
 import { ToastContainer } from "react-toastify";
 import { handleSuccess, handleError } from "../utils";
@@ -45,15 +43,13 @@ function Contact() {
       }
     } catch (error) {
       handleError(error);
-    }finally{
-      setLoading(false)
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="bg-white text-gray-800 min-h-screen font-urbanist">
-      <Header />
-
       {/* Hero Section */}
       <section
         className="relative w-full h-[90vh] bg-cover bg-center"
@@ -188,8 +184,6 @@ function Contact() {
           </div>
         </form>
       </div>
-
-      <Footer />
       <ToastContainer />
     </div>
   );

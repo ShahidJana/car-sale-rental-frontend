@@ -1,37 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import Footer from "../components/layout/Footer";
-import Header from "../components/layout/Header";
 import CarCard from "../components/common/CarCard";
 import Pagination from "../components/common/Pagination";
 import { fetchCars } from "../services/CarService";
 import { ToastContainer } from "react-toastify";
 import { handleError, handleSuccess } from "../utils";
-
-const OfferCard = ({
-  imageSrc,
-  imageAlt,
-  title,
-  subtitle,
-  description,
-  buttonText,
-  onButtonClick,
-}) => (
-  <div className="bg-white text-black rounded-2xl overflow-hidden shadow-lg">
-    <img src={imageSrc} alt={imageAlt} className="w-full h-60 object-cover" />
-    <div className="p-6">
-      <h3 className="text-lg font-medium">{title}</h3>
-      <p className="text-2xl font-bold mt-2">{subtitle}</p>
-      <p className="text-sm mt-1 text-gray-600">{description}</p>
-      <button
-        onClick={onButtonClick}
-        className="mt-4 bg-green-600 px-5 py-2 text-white rounded-full hover:bg-green-700"
-      >
-        {buttonText}
-      </button>
-    </div>
-  </div>
-);
 
 export default function CarBuy() {
   const [saleCars, setSaleCars] = useState([]);
@@ -95,8 +68,6 @@ export default function CarBuy() {
   return (
     <>
       <div className="text-white bg-white min-h-screen font-urbanist">
-        <Header />
-
         {/* Hero Section */}
         <section
           className="relative text-center py-24 px-4 md:px-10 bg-cover bg-center bg-no-repeat"
@@ -225,7 +196,7 @@ export default function CarBuy() {
                 imageAlt={car.make}
                 title={`${car.make} ${car.model}`}
                 description={car.description}
-                buttonText="View Car Ads"
+                buttonText="View Car Offer"
                 onButtonClick={() =>
                   navigate(`/car-sale/${car._id}/detailed?type=sale`, {
                     state: { car },
@@ -238,7 +209,7 @@ export default function CarBuy() {
         </section>
 
         {/* Top-rated Section */}
-        <section className="bg-white text-black px-6 py-12">
+        {/* <section className="bg-white text-black px-6 py-12">
           <h2 className="text-4xl text-center">
             <span className="text-yellow-500">Top-rated</span> cars by type
           </h2>
@@ -286,11 +257,35 @@ export default function CarBuy() {
               </div>
             </div>
           </div>
-        </section>
+        </section> */}
 
-        <Footer />
         <ToastContainer />
       </div>
     </>
   );
 }
+
+const OfferCard = ({
+  imageSrc,
+  imageAlt,
+  title,
+  subtitle,
+  description,
+  buttonText,
+  onButtonClick,
+}) => (
+  <div className="bg-white text-black rounded-2xl overflow-hidden shadow-lg">
+    <img src={imageSrc} alt={imageAlt} className="w-full h-60 object-cover" />
+    <div className="p-6">
+      <h3 className="text-lg font-medium">{title}</h3>
+      <p className="text-2xl font-bold mt-2">{subtitle}</p>
+      <p className="text-sm mt-1 text-gray-600">{description}</p>
+      <button
+        onClick={onButtonClick}
+        className="mt-4 bg-green-600 px-5 py-2 text-white rounded-full hover:bg-green-700"
+      >
+        {buttonText}
+      </button>
+    </div>
+  </div>
+);

@@ -107,10 +107,6 @@ export default function UsersDetail() {
       return handleError("Password must be at least 6 characters long");
     }
 
-    if (_id && password && password.length < 6) {
-      return handleError("Password must be at least 6 characters long");
-    }
-
     if (!role) {
       return handleError("Select the role");
     }
@@ -119,18 +115,16 @@ export default function UsersDetail() {
 
     try {
       if (_id) {
-        // 2. Update existing user
         const updatedData = {
           name,
           email,
           role,
-          ...(password && { password }), // only include password if filled
+          ...(password && { password }),
         };
 
         const res = await axios.put(`${API_URL}/user_auth/${_id}`, updatedData);
         handleSuccess(res.data.message || "User updated successfully");
       } else {
-        // 3. Register new user
         const res = await axios.post(`${API_URL}/user_auth/signup`, {
           name,
           email,
@@ -222,29 +216,32 @@ export default function UsersDetail() {
               </h2>
 
               <form onSubmit={handleSubmit} className="space-y-4">
-                {["name", "email", "password"].map((field) => (
-                  <div key={field}>
-                    <label
-                      htmlFor={field}
-                      className="block font-medium capitalize mb-1"
-                    >
-                      {field} <span className="text-red-600">*</span>
-                    </label>
-                    <input
-                      id={field}
-                      type="text"
-                      name={field}
-                      value={formData[field]}
-                      onChange={handleChange}
-                      placeholder={`${
-                        field === "password"
-                          ? "Password must be at least 6 digits long"
-                          : `${"Enter your " + field}`
-                      }`}
-                      className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-600"
-                    />
-                  </div>
-                ))}
+                {["name", "email", "password"]
+                  .filter((field) => !(mode==="edit" && field === "password"))
+                  .map((field) => (
+                    <div key={field}>
+                      <label
+                        htmlFor={field}
+                        className="block font-medium capitalize mb-1"
+                      >
+                        {field} <span className="text-red-600">*</span>
+                      </label>
+                      <input
+                        id={field}
+                        type={field === "password" ? "password" : "text"}
+                        name={field}
+                        value={formData[field]}
+                        onChange={handleChange}
+                        placeholder={
+                          field === "password"
+                            ? "Password must be at least 6 digits long"
+                            : `Enter your ${field}`
+                        }
+                        className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-600"
+                      />
+                    </div>
+                  ))}
+
                 {/* Role Select */}
                 <div>
                   <label

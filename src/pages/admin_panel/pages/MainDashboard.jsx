@@ -37,17 +37,20 @@ export const Dashboard = () => {
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        const [listed, sold, rented, users] = await Promise.all([
+        const [listed, sold, rented, users,reviews] = await Promise.all([
           axios.get(`${API_URL}/cars/`),
           axios.get(`${API_URL}/sales/`),
           axios.get(`${API_URL}/rentals/`),
           axios.get(`${API_URL}/user_auth/getAllUsers`),
+          axios.get(`${API_URL}/reviewratings/`),
+          
         ]);
 
         setListedCars(listed.data || []);
         setSoldCars(sold.data.sales || []);
         setRentedCars(rented.data || []);
         setActiveUsers(users.data || []);
+        setReviewRating(reviews.data.reviews || [])
       } catch (error) {
         handleError("Failed to fetch dashboard data", error.message);
       } finally {
@@ -94,7 +97,7 @@ export const Dashboard = () => {
         title: "Reviews",
         value: reviewRating.length ,
         bgColor: "bg-gray-400",
-        to: "/admin-dashboard/active-users",
+        to: "/admin-dashboard/reviews",
         Icon: FaComments,
       },
     ],
